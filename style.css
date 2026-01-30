@@ -1,0 +1,31 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+#question {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+button {
+  width: 90%;
+  font-size: 18px;
+  margin: 6px auto;
+  padding: 12px;
+  display: block;
+}
+
+#result {
+  font-size: 18px;
+  margin-top: 12px;
+}
+
+#explanation {
+  margin-top: 8px;
+  font-size: 16px;
+  background: #f2f2f2;
+  padding: 10px;
+  border-radius: 6px;
+}
