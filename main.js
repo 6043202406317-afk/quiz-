@@ -5,18 +5,12 @@ const quizData = {
       q: "CPUの役割はどれ？",
       c: ["記憶", "演算", "表示", "印刷"],
       a: 1,
-      e: "CPUは計算や制御を行う装置です。"
-    },
-    {
-      q: "2進数の10は10進数でいくつ？",
-      c: ["1", "2", "3", "4"],
-      a: 1,
-      e: "2進数の10は10進数で2です。"
+      e: "CPUは計算や制御を行います。"
     }
   ],
   physics: [
     {
-      q: "速度の単位はどれ？",
+      q: "速度の単位は？",
       c: ["m", "m/s", "kg", "N"],
       a: 1,
       e: "速度の単位は m/s です。"
@@ -27,12 +21,11 @@ const quizData = {
       q: "apple の意味は？",
       c: ["犬", "りんご", "走る", "青い"],
       a: 1,
-      e: "apple は「りんご」です。"
+      e: "apple は りんご。"
     }
   ]
 };
 
-// ===== 状態 =====
 let questions = [];
 let order = [];
 let currentIndex = 0;
@@ -43,12 +36,15 @@ let hasCounted = false;
 // ===== クイズ開始 =====
 function startQuiz(type) {
   questions = quizData[type];
+  correctCount = 0;
+  answerCount = 0;
 
   document.getElementById("home").style.display = "none";
   document.getElementById("quiz").style.display = "block";
 
-  correctCount = 0;
-  answerCount = 0;
+  const body = document.getElementById("body");
+  body.className = "";
+  body.classList.add("bg-" + type);
 
   shuffle();
   showQuestion();
@@ -67,41 +63,35 @@ function shuffle() {
 // ===== 問題表示 =====
 function showQuestion() {
   hasCounted = false;
-
   document.getElementById("result").textContent = "";
   document.getElementById("explanation").textContent = "";
 
   const q = questions[order[currentIndex]];
   document.getElementById("question").textContent = q.q;
 
-  const choicesDiv = document.getElementById("choices");
-  choicesDiv.innerHTML = "";
+  const div = document.getElementById("choices");
+  div.innerHTML = "";
 
   let choices = q.c.map((text, index) => ({ text, index }));
-
-  // 選択肢シャッフル
-  for (let i = choices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [choices[i], choices[j]] = [choices[j], choices[i]];
-  }
+  choices.sort(() => Math.random() - 0.5);
 
   choices.forEach(choice => {
     const btn = document.createElement("button");
     btn.textContent = choice.text;
     btn.onclick = () => checkAnswer(choice.index, btn);
-    choicesDiv.appendChild(btn);
+    div.appendChild(btn);
   });
 }
 
-// ===== 回答処理 =====
+// ===== 回答 =====
 function checkAnswer(selectedIndex, btn) {
   const q = questions[order[currentIndex]];
 
   if (selectedIndex === q.a) {
-    btn.style.background = "#b6f2c2";
+    btn.classList.add("correct");
     document.getElementById("result").textContent = "⭕ 正解！";
   } else {
-    btn.style.background = "#f2b6b6";
+    btn.classList.add("wrong");
     document.getElementById("result").textContent = "❌ 不正解";
   }
 
@@ -119,17 +109,16 @@ function checkAnswer(selectedIndex, btn) {
   }
 }
 
-// ===== 次の問題 =====
+// ===== 次へ =====
 function nextQuestion() {
   currentIndex++;
-  if (currentIndex >= order.length) {
-    shuffle(); // 1周したら何も表示せずリセット
-  }
+  if (currentIndex >= order.length) shuffle();
   showQuestion();
 }
 
-// ===== ホームに戻る =====
-function backHome() {
+// ===== ホーム =====
+function goHome() {
   document.getElementById("quiz").style.display = "none";
   document.getElementById("home").style.display = "block";
+  document.getElementById("body").className = "";
 }
