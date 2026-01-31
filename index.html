@@ -8,16 +8,18 @@
 </head>
 <body>
 
+<!-- ☰ -->
 <div id="menuBtn">☰</div>
 
+<!-- サイドメニュー -->
 <div id="sideMenu" class="hidden">
-  <h2>設定</h2>
+  <div class="menuHeader">設定</div>
   <button id="darkBtn">ダークモード</button>
   <button>禪院 直哉</button>
 </div>
 <div id="overlay" class="hidden"></div>
 
-<!-- ホーム画面 -->
+<!-- ホーム -->
 <div id="home" class="screen">
   <h1>過去問道場</h1>
   <button onclick="startQuiz('it')">情報技術（テスト）</button>
@@ -25,14 +27,12 @@
   <button onclick="startQuiz('english')">英語</button>
 </div>
 
-<!-- 問題画面 -->
+<!-- 問題 -->
 <div id="quiz" class="screen hidden">
   <p id="rate">正答率：--%</p>
 
   <div id="question"></div>
-
   <div id="choices"></div>
-
   <div id="explanation"></div>
 
   <div class="nav">
