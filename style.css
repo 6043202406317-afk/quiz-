@@ -1,18 +1,22 @@
 body {
-  font-family: sans-serif;
   margin: 0;
-  background: #f0f0f0;
+  font-family: sans-serif;
+  background: #f5f5f5;
 }
 
+/* 非表示 */
 .hidden {
   display: none;
 }
 
-/* ハンバーガー */
+/* ☰ */
 #menuBtn {
-  font-size: 26px;
-  padding: 10px;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-size: 28px;
   cursor: pointer;
+  z-index: 100;
 }
 
 /* メニュー */
@@ -23,7 +27,7 @@ body {
   width: 66%;
   height: 100%;
   background: #ddd;
-  z-index: 10;
+  z-index: 99;
 }
 
 .menu-content {
@@ -31,91 +35,92 @@ body {
 }
 
 .menu-content h2 {
-  font-size: 26px;
-  margin-bottom: 20px;
+  font-size: 28px;
 }
 
 #darkToggle {
   width: 100%;
   padding: 15px;
-  font-size: 18px;
+  margin: 20px 0;
 }
 
 .username {
-  margin-top: 20px;
   font-size: 20px;
 }
 
 /* ホーム */
 #home {
-  padding: 30px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-size: 36px;
+  margin-bottom: 30px;
 }
 
 #home button {
-  display: block;
-  width: 100%;
+  width: 80%;
+  max-width: 300px;
   padding: 20px;
-  margin: 10px 0;
+  margin: 10px;
   font-size: 18px;
 }
 
 /* クイズ */
 #quiz {
-  background: white;
   padding: 20px;
+  background: white;
+  min-height: 100vh;
 }
 
 #choices button {
   width: 100%;
-  padding: 18px;
-  margin: 8px 0;
-  font-size: 16px;
+  padding: 15px;
+  margin: 10px 0;
+  font-size: 18px;
 }
 
 .correct {
-  background: #b6f5b6;
+  background: #b6f2c2;
 }
 
 .wrong {
-  background: #f5b6b6;
+  background: #f2b6b6;
 }
 
 #explanation {
-  background: #e6f4ff;
-  padding: 15px;
+  background: #e6f3ff;
+  padding: 10px;
   margin-top: 10px;
 }
 
-/* ナビ */
 .nav {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
 .nav button {
-  width: 48%;
+  width: 45%;
   padding: 15px;
-  font-size: 16px;
 }
 
 .homeBtn {
   width: 100%;
   padding: 15px;
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
 /* ダークモード */
-.dark body {
+.dark {
   background: #000;
   color: #fff;
 }
 
 .dark #quiz {
-  background: #222;
-}
-
-.dark #darkToggle {
-  background: gray;
-  color: white;
+  background: #000;
 }
