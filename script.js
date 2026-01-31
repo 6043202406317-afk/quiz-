@@ -52,21 +52,33 @@ const data = {
 };
 
 // ===== 状態 =====
-let subject = "";
 let questions = [];
+let order = [];
 let index = 0;
 
 let correct = 0;
 let answered = 0;
 let counted = false;
 
+// ===== シャッフル関数 =====
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
 // ===== 開始 =====
 function startQuiz(type) {
-  subject = type;
   questions = data[type];
+  order = [...Array(questions.length).keys()];
+  shuffle(order);
+
   index = 0;
   correct = 0;
   answered = 0;
+
+  document.getElementById("rate").textContent = "正答率：--%";
 
   document.getElementById("home").classList.add("hidden");
   document.getElementById("quiz").classList.remove("hidden");
@@ -80,25 +92,40 @@ function showQuestion() {
   document.getElementById("result").textContent = "";
   document.getElementById("explanation").textContent = "";
 
-  const q = questions[index];
+  const q = questions[order[index]];
   document.getElementById("question").textContent = q.q;
 
-  const choices = document.getElementById("choices");
-  choices.innerHTML = "";
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = "";
 
-  q.c.forEach((text, i) => {
+  // 選択肢を index 付きで作る
+  let choices = q.c.map((text, i) => ({
+    text,
+    index: i
+  }));
+
+  // 選択肢シャッフル
+  shuffle(choices);
+
+  choices.forEach(choice => {
     const btn = document.createElement("button");
-    btn.textContent = text;
-    btn.onclick = () => checkAnswer(i, btn);
-    choices.appendChild(btn);
+    btn.textContent = choice.text;
+    btn.onclick = () => checkAnswer(choice.index, btn);
+    choicesDiv.appendChild(btn);
   });
 }
 
 // ===== 判定 =====
-function checkAnswer(i, btn) {
-  const q = questions[index];
+function checkAnswer(selected, btn) {
+  const q = questions[order[index]];
 
-  if (i === q.a) {
+  // ★ 色を全部リセット
+  document.querySelectorAll("#choices button").forEach(b => {
+    b.classList.remove("correct", "wrong");
+  });
+
+  // ★ 押したボタンだけ色をつける
+  if (selected === q.a) {
     btn.classList.add("correct");
     document.getElementById("result").textContent = "⭕ 正解！";
   } else {
@@ -106,10 +133,11 @@ function checkAnswer(i, btn) {
     document.getElementById("result").textContent = "❌ 不正解";
   }
 
+  // 正答率は最初の1回だけ
   if (!counted) {
     counted = true;
     answered++;
-    if (i === q.a) correct++;
+    if (selected === q.a) correct++;
 
     const rate = Math.round((correct / answered) * 100);
     document.getElementById("rate").textContent =
@@ -119,14 +147,20 @@ function checkAnswer(i, btn) {
   }
 }
 
-// ===== 移動 =====
+// ===== 次の問題 =====
 function nextQuestion() {
-  if (index < questions.length - 1) {
-    index++;
-    showQuestion();
+  index++;
+
+  // ★ 一周したら再シャッフルして最初へ
+  if (index >= order.length) {
+    shuffle(order);
+    index = 0;
   }
+
+  showQuestion();
 }
 
+// ===== 前の問題 =====
 function prevQuestion() {
   if (index > 0) {
     index--;
@@ -134,6 +168,7 @@ function prevQuestion() {
   }
 }
 
+// ===== ホーム =====
 function goHome() {
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("home").classList.remove("hidden");
