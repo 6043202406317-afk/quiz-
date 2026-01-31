@@ -14,7 +14,6 @@ const data = {
   ]
 };
 
-let subject = "";
 let questions = [];
 let index = 0;
 let correct = 0;
@@ -31,7 +30,6 @@ function shuffle(arr) {
 
 // ===== 開始 =====
 function startQuiz(type) {
-  subject = type;
   questions = [...data[type]];
   shuffle(questions);
   index = 0;
@@ -56,10 +54,10 @@ function showQuestion() {
   const choices = document.getElementById("choices");
   choices.innerHTML = "";
 
-  let choiceArr = q.c.map((t, i) => ({ t, i }));
-  shuffle(choiceArr);
+  let arr = q.c.map((t, i) => ({ t, i }));
+  shuffle(arr);
 
-  choiceArr.forEach(c => {
+  arr.forEach(c => {
     const btn = document.createElement("button");
     btn.textContent = c.t;
     btn.onclick = () => checkAnswer(c.i, btn);
@@ -71,9 +69,9 @@ function showQuestion() {
 function checkAnswer(i, btn) {
   if (counted) return;
 
-  const q = questions[index];
   document.querySelectorAll("#choices button").forEach(b => b.className = "");
 
+  const q = questions[index];
   if (i === q.a) {
     btn.classList.add("correct");
     document.getElementById("result").textContent = "⭕ 正解！";
@@ -114,11 +112,12 @@ function goHome() {
   document.getElementById("home").classList.remove("hidden");
 }
 
-// ===== メニュー =====
+// ===== ☰ メニュー（トグル） =====
 document.getElementById("menuBtn").onclick = () => {
   document.getElementById("menu").classList.toggle("hidden");
 };
 
+// ===== ダークモード =====
 document.getElementById("darkToggle").onclick = () => {
   document.body.classList.toggle("dark");
 };
