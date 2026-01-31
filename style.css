@@ -16,7 +16,7 @@ body {
   left: 10px;
   font-size: 28px;
   cursor: pointer;
-  z-index: 100;
+  z-index: 200;
 }
 
 /* メニュー */
@@ -27,7 +27,7 @@ body {
   width: 66%;
   height: 100%;
   background: #ddd;
-  z-index: 99;
+  z-index: 150;
 }
 
 .menu-content {
@@ -36,16 +36,14 @@ body {
 
 .menu-content h2 {
   font-size: 28px;
+  margin-bottom: 20px;
 }
 
-#darkToggle {
+.menu-content button {
   width: 100%;
   padding: 15px;
-  margin: 20px 0;
-}
-
-.username {
-  font-size: 20px;
+  font-size: 18px;
+  margin-bottom: 15px;
 }
 
 /* ホーム */
@@ -84,20 +82,24 @@ body {
   font-size: 18px;
 }
 
+/* 正誤 */
 .correct {
-  background: #b6f2c2;
+  background: #b6f2c2 !important;
 }
 
 .wrong {
-  background: #f2b6b6;
+  background: #f2b6b6 !important;
 }
 
+/* 解説 */
 #explanation {
   background: #e6f3ff;
   padding: 10px;
   margin-top: 10px;
+  border-radius: 8px;
 }
 
+/* ナビ */
 .nav {
   display: flex;
   justify-content: space-between;
@@ -115,7 +117,7 @@ body {
   margin-top: 20px;
 }
 
-/* ダークモード */
+/* 🌙 ダークモード */
 .dark {
   background: #000;
   color: #fff;
@@ -123,4 +125,18 @@ body {
 
 .dark #quiz {
   background: #000;
+}
+
+.dark #choices button {
+  background: #666;
+  color: #fff;
+}
+
+.dark #menu {
+  background: #333;
+}
+
+.dark .menu-content button {
+  background: #555;
+  color: #fff;
 }
