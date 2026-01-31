@@ -36,8 +36,15 @@ let hasCounted = false;
 // ===== クイズ開始 =====
 function startQuiz(type) {
   questions = quizData[type];
+
+  // 状態リセット
   correctCount = 0;
   answerCount = 0;
+  currentIndex = 0;
+
+  document.getElementById("rate").textContent = "正答率：--%";
+  document.getElementById("result").textContent = "";
+  document.getElementById("explanation").textContent = "";
 
   document.getElementById("home").style.display = "none";
   document.getElementById("quiz").style.display = "block";
@@ -57,12 +64,12 @@ function shuffle() {
     const j = Math.floor(Math.random() * (i + 1));
     [order[i], order[j]] = [order[j], order[i]];
   }
-  currentIndex = 0;
 }
 
 // ===== 問題表示 =====
 function showQuestion() {
   hasCounted = false;
+
   document.getElementById("result").textContent = "";
   document.getElementById("explanation").textContent = "";
 
@@ -109,16 +116,30 @@ function checkAnswer(selectedIndex, btn) {
   }
 }
 
-// ===== 次へ =====
+// ===== 次の問題 =====
 function nextQuestion() {
   currentIndex++;
-  if (currentIndex >= order.length) shuffle();
+  if (currentIndex >= order.length) {
+    currentIndex = 0;
+    shuffle();
+  }
   showQuestion();
 }
 
-// ===== ホーム =====
+// ===== ホームに戻る（完全修正） =====
 function goHome() {
+  // 表示切替
   document.getElementById("quiz").style.display = "none";
   document.getElementById("home").style.display = "block";
+
+  // 状態完全リセット
+  questions = [];
+  order = [];
+  currentIndex = 0;
+  correctCount = 0;
+  answerCount = 0;
+  hasCounted = false;
+
+  // 背景色リセット
   document.getElementById("body").className = "";
 }
