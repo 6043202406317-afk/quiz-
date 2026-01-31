@@ -4,6 +4,15 @@ body {
   background: #f5f5f5;
 }
 
+/* 画面切り替え */
+.screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 /* ☰ */
 #menuBtn {
   position: fixed;
@@ -19,10 +28,10 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 200px;
-  height: 60%;
+  width: 180px;
+  height: 50%;
   background: #fff;
-  padding: 15px;
+  padding: 12px;
   z-index: 1000;
 }
 
@@ -32,7 +41,7 @@ body {
 
 #sideMenu button {
   width: 100%;
-  margin: 8px 0;
+  margin: 6px 0;
   padding: 8px;
 }
 
@@ -45,14 +54,6 @@ body {
 }
 
 /* ホーム */
-#home {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 #home h1 {
   margin-bottom: 20px;
 }
@@ -63,11 +64,9 @@ body {
   padding: 10px;
 }
 
-/* クイズ画面 */
+/* 問題画面 */
 #quiz {
-  min-height: 100vh;
-  padding: 60px 20px;
-  background: #fff;
+  padding-top: 60px;
 }
 
 #question {
@@ -76,42 +75,54 @@ body {
 }
 
 #choices button {
-  display: block;
-  width: 100%;
-  margin: 6px 0;
+  width: 260px;
+  margin: 6px;
   padding: 10px;
+  background: #fff; /* ←通常は白 */
 }
 
-.correct { background: #b7f7b7; }
-.wrong { background: #f7b7b7; }
+/* 正誤 */
+.correct { background: #b7f7b7 !important; }
+.wrong { background: #f7b7b7 !important; }
 
+/* 解説 */
 #explanation {
-  margin-top: 10px;
+  margin-top: 12px;
   padding: 10px;
   background: #e0f0ff;
+  color: #000;
+  width: 260px;
 }
 
+/* ナビ */
 .nav {
   display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .homeBtn {
-  margin-top: 15px;
-  width: 100%;
+  margin-top: 10px;
 }
 
 /* ダークモード */
-.dark body,
-.dark #quiz {
+.dark body {
   background: #000;
   color: #fff;
 }
 
+.dark #quiz {
+  background: #000;
+}
+
 .dark #choices button {
-  background: #666;
+  background: #777;
   color: #fff;
+}
+
+.dark #explanation {
+  background: #88bbee;
+  color: #000; /* ←指定どおり黒 */
 }
 
 .hidden {
