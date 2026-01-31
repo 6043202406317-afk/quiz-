@@ -2,41 +2,41 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>過去問道場</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ☰ -->
+<!-- ☰ メニュー -->
 <div id="menuBtn">☰</div>
 
-<!-- メニュー -->
-<div id="menuOverlay" class="hidden">
-  <div id="menu">
-    <h2>設定</h2>
-    <button id="darkToggle">ダークモード</button>
-    <button class="userBtn">禪院 直哉</button>
-  </div>
+<!-- サイドメニュー -->
+<div id="sideMenu" class="hidden">
+  <h2>設定</h2>
+  <button id="darkBtn">ダークモード</button>
+  <button id="nameBtn">禪院 直哉</button>
 </div>
 
-<!-- ホーム -->
+<!-- 背景クリック用 -->
+<div id="overlay" class="hidden"></div>
+
+<!-- ホーム画面 -->
 <div id="home">
-  <h1 class="title">過去問道場</h1>
+  <h1>過去問道場</h1>
   <button onclick="startQuiz('it')">情報技術（テスト）</button>
   <button onclick="startQuiz('physics')">物理</button>
   <button onclick="startQuiz('english')">英語</button>
 </div>
 
-<!-- クイズ -->
+<!-- クイズ画面 -->
 <div id="quiz" class="hidden">
-  <p id="rate">正答率：--%</p>
+  <div id="question"></div>
 
-  <h2 id="question"></h2>
   <div id="choices"></div>
 
-  <p id="result"></p>
+  <div id="result"></div>
   <div id="explanation"></div>
+  <div id="rate"></div>
 
   <div class="nav">
     <button onclick="prevQuestion()">前の問題</button>
