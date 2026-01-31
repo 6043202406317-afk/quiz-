@@ -20,7 +20,7 @@ const quizData = {
       q: "apple の意味は？",
       c: ["犬", "りんご", "走る", "青い"],
       a: 1,
-      e: "apple は「りんご」という意味です。"
+      e: "apple は「りんご」です。"
     }
   ]
 };
@@ -30,13 +30,13 @@ let order = [];
 let currentIndex = 0;
 let correctCount = 0;
 let answerCount = 0;
-let hasCounted = false;
+let hasAnswered = false;
 
 function startQuiz(type) {
   questions = quizData[type];
+  currentIndex = 0;
   correctCount = 0;
   answerCount = 0;
-  currentIndex = 0;
 
   document.getElementById("home").style.display = "none";
   document.getElementById("quiz").style.display = "block";
@@ -55,7 +55,7 @@ function shuffle() {
 }
 
 function showQuestion() {
-  hasCounted = false;
+  hasAnswered = false;
   document.getElementById("result").textContent = "";
   document.getElementById("explanation").textContent = "";
   document.getElementById("rate").textContent = "";
@@ -77,22 +77,22 @@ function showQuestion() {
     });
 }
 
-function checkAnswer(selectedIndex, btn) {
-  if (hasCounted) return;
+function checkAnswer(selected, btn) {
+  if (hasAnswered) return;
 
   const q = questions[order[currentIndex]];
 
-  if (selectedIndex === q.a) {
+  if (selected === q.a) {
     btn.classList.add("correct");
-    document.getElementById("result").textContent = "⭕ 正解！";
+    document.getElementById("result").textContent = "⭕ 正解";
+    correctCount++;
   } else {
     btn.classList.add("wrong");
     document.getElementById("result").textContent = "❌ 不正解";
   }
 
-  hasCounted = true;
   answerCount++;
-  if (selectedIndex === q.a) correctCount++;
+  hasAnswered = true;
 
   const rate = Math.round((correctCount / answerCount) * 100);
   document.getElementById("rate").textContent =
@@ -104,7 +104,7 @@ function checkAnswer(selectedIndex, btn) {
 function nextQuestion() {
   currentIndex++;
   if (currentIndex >= order.length) {
-    alert("クイズ終了！");
+    alert("終了！");
     goHome();
   } else {
     showQuestion();
