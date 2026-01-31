@@ -2,7 +2,7 @@ const data = {
   it: [
     { q: "CPUの役割は？", c: ["記憶", "演算", "表示", "印刷"], a: 1, e: "CPUは演算と制御を行います。" },
     { q: "2進数の10は？", c: ["1", "2", "3", "4"], a: 1, e: "10進数で2です。" },
-    { q: "RAMの特徴は？", c: ["永続的に記憶", "一時記憶", "補助記憶", "ROM"], a: 1, e: "RAMは一時記憶です。" }
+    { q: "RAMの特徴は？", c: ["永続", "一時", "補助", "ROM"], a: 1, e: "RAMは一時記憶です。" }
   ],
   physics: [
     { q: "力の単位は？", c: ["J", "W", "N", "kg"], a: 2, e: "ニュートンです。" }
@@ -16,6 +16,7 @@ let questions = [];
 let index = 0;
 let correct = 0;
 let answered = 0;
+let counted = false; // ← 重要
 
 function startQuiz(type) {
   questions = shuffle([...data[type]]);
@@ -29,6 +30,7 @@ function startQuiz(type) {
 }
 
 function showQuestion() {
+  counted = false; // ← 問題ごとにリセット
   const q = questions[index];
   document.getElementById("question").textContent = q.q;
   document.getElementById("explanation").textContent = "";
@@ -47,20 +49,22 @@ function showQuestion() {
 function answer(i, btn) {
   const q = questions[index];
 
-  // 色を一旦リセット
+  // 色リセット
   document.querySelectorAll("#choices button").forEach(b=>{
     b.classList.remove("correct","wrong");
   });
 
-  if (i === q.a) {
-    btn.classList.add("correct");
-    correct++;
-  } else {
-    btn.classList.add("wrong");
+  if (i === q.a) btn.classList.add("correct");
+  else btn.classList.add("wrong");
+
+  // ★ 正答率は最初の1回だけ
+  if (!counted) {
+    counted = true;
+    answered++;
+    if (i === q.a) correct++;
+    updateRate();
   }
 
-  answered++;
-  updateRate();
   document.getElementById("explanation").textContent = "解説：" + q.e;
 }
 
