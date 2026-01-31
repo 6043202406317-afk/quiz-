@@ -3,7 +3,7 @@ const data = {
   it: [
     { q: "CPUの役割は？", c: ["記憶", "演算", "表示", "印刷"], a: 1, e: "CPUは演算と制御を行います。" },
     { q: "2進数の10は？", c: ["1", "2", "3", "4"], a: 1, e: "10(2) = 2(10)" },
-    { q: "RAMの特徴は？", c: ["永続", "一時記憶", "補助記憶", "ROM"], a: 1, e: "RAMは一時的な記憶です。" },
+    { q: "RAMの特徴は？", c: ["永続", "一時記憶", "補助記憶", "ROM"], a: 1, e: "RAMは一時記憶装置です。" },
     { q: "OSの役割は？", c: ["計算", "管理", "印刷", "通信"], a: 1, e: "OSは全体を管理します。" }
   ],
   physics: [
@@ -32,6 +32,7 @@ function shuffle(arr) {
 function startQuiz(type) {
   questions = [...data[type]];
   shuffle(questions);
+
   index = 0;
   correct = 0;
   answered = 0;
@@ -45,6 +46,7 @@ function startQuiz(type) {
 // ===== 表示 =====
 function showQuestion() {
   counted = false;
+
   document.getElementById("result").textContent = "";
   document.getElementById("explanation").textContent = "";
 
@@ -65,29 +67,35 @@ function showQuestion() {
   });
 }
 
-// ===== 判定 =====
+// ===== 判定（←ここが重要）=====
 function checkAnswer(i, btn) {
-  if (counted) return;
-
-  document.querySelectorAll("#choices button").forEach(b => b.className = "");
-
   const q = questions[index];
+
+  // 色リセット（何回でも押せる）
+  document.querySelectorAll("#choices button").forEach(b => {
+    b.classList.remove("correct", "wrong");
+  });
+
   if (i === q.a) {
     btn.classList.add("correct");
     document.getElementById("result").textContent = "⭕ 正解！";
-    correct++;
   } else {
     btn.classList.add("wrong");
     document.getElementById("result").textContent = "❌ 不正解";
   }
 
-  counted = true;
-  answered++;
+  // 正答率は最初の1回だけ
+  if (!counted) {
+    counted = true;
+    answered++;
+    if (i === q.a) correct++;
 
-  const rate = Math.round((correct / answered) * 100);
-  document.getElementById("rate").textContent = `正答率：${rate}%`;
+    const rate = Math.round((correct / answered) * 100);
+    document.getElementById("rate").textContent =
+      `正答率：${rate}%（${correct}/${answered}）`;
 
-  document.getElementById("explanation").textContent = "解説：" + q.e;
+    document.getElementById("explanation").textContent = "解説：" + q.e;
+  }
 }
 
 // ===== 移動 =====
@@ -112,12 +120,24 @@ function goHome() {
   document.getElementById("home").classList.remove("hidden");
 }
 
-// ===== ☰ メニュー（トグル） =====
+// ===== ☰ メニュー =====
+const overlay = document.getElementById("menuOverlay");
+
 document.getElementById("menuBtn").onclick = () => {
-  document.getElementById("menu").classList.toggle("hidden");
+  overlay.classList.toggle("hidden");
 };
 
-// ===== ダークモード =====
+// メニュー外クリックで閉じる
+overlay.onclick = () => {
+  overlay.classList.add("hidden");
+};
+
+// メニュー内クリックは閉じない
+document.getElementById("menu").onclick = e => {
+  e.stopPropagation();
+};
+
+// ダークモード
 document.getElementById("darkToggle").onclick = () => {
   document.body.classList.toggle("dark");
 };
