@@ -2,9 +2,12 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+
+  <!-- ★スマホ最適化の要 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>過去問道場</title>
 
-  <!-- ★ここが head -->
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -19,10 +22,8 @@
   <p id="result"></p>
   <p id="explanation"></p>
 
-  <button onclick="nextQuestion()">次の問題</button>
+  <button id="next" onclick="nextQuestion()">次の問題</button>
 
-  <!-- ★JSは body の一番下 -->
   <script src="main.js"></script>
-
 </body>
 </html>
