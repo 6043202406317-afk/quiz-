@@ -1,8 +1,6 @@
 body {
   font-family: sans-serif;
-  text-align: center;
   margin: 0;
-  padding: 20px;
   background: #f0f0f0;
 }
 
@@ -10,75 +8,114 @@ body {
   display: none;
 }
 
-/* ===== ホーム画面 ===== */
-#home h1 {
+/* ハンバーガー */
+#menuBtn {
+  font-size: 26px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* メニュー */
+#menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 66%;
+  height: 100%;
+  background: #ddd;
+  z-index: 10;
+}
+
+.menu-content {
+  padding: 20px;
+}
+
+.menu-content h2 {
+  font-size: 26px;
   margin-bottom: 20px;
 }
 
-.subject {
+#darkToggle {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+}
+
+.username {
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+/* ホーム */
+#home {
+  padding: 30px;
+}
+
+#home button {
   display: block;
-  width: 90%;
-  margin: 12px auto;
-  padding: 18px;
-  font-size: 20px;
-}
-
-/* ===== 問題画面 ===== */
-#quiz {
-  background: #ffffff; /* 白背景 */
+  width: 100%;
   padding: 20px;
-  border-radius: 12px;
+  margin: 10px 0;
+  font-size: 18px;
 }
 
-#question {
-  font-size: 20px;
-  margin-bottom: 16px;
+/* クイズ */
+#quiz {
+  background: white;
+  padding: 20px;
 }
 
 #choices button {
-  width: 90%;
-  margin: 8px auto;
-  padding: 14px;
-  font-size: 18px;
+  width: 100%;
+  padding: 18px;
+  margin: 8px 0;
+  font-size: 16px;
 }
 
-/* 正解・不正解 */
 .correct {
-  background: #c8f7c5;
+  background: #b6f5b6;
 }
 
 .wrong {
-  background: #f7c5c5;
+  background: #f5b6b6;
 }
 
-/* ナビゲーション */
+#explanation {
+  background: #e6f4ff;
+  padding: 15px;
+  margin-top: 10px;
+}
+
+/* ナビ */
 .nav {
   display: flex;
   justify-content: space-between;
-  margin-top: 16px;
+  margin-top: 15px;
 }
 
 .nav button {
-  width: 45%;
-  padding: 16px;
-  font-size: 18px;
-}
-
-/* ホームに戻る */
-#homeBtn {
-  margin-top: 24px;
-  width: 90%;
-  padding: 18px;
-  font-size: 18px;
-  background: #ddd;
-}
-
-/* 解説（薄い青背景） */
-#explanation {
-  margin-top: 12px;
+  width: 48%;
+  padding: 15px;
   font-size: 16px;
-  background: #e8f4ff;
-  padding: 12px;
-  border-radius: 8px;
-  line-height: 1.5;
+}
+
+.homeBtn {
+  width: 100%;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+/* ダークモード */
+.dark body {
+  background: #000;
+  color: #fff;
+}
+
+.dark #quiz {
+  background: #222;
+}
+
+.dark #darkToggle {
+  background: gray;
+  color: white;
 }
