@@ -1,84 +1,44 @@
 // ===== 問題 =====
 const data = {
   it: [
-    {
-      q: "CPUの役割はどれ？",
-      c: ["記憶", "演算", "表示", "印刷"],
-      a: 1,
-      e: "CPUは演算や制御を行う装置です。"
-    },
-    {
-      q: "2進数の10は10進数でいくつ？",
-      c: ["1", "2", "3", "4"],
-      a: 1,
-      e: "2進数の10は10進数で2です。"
-    },
-    {
-      q: "RAMの特徴として正しいものは？",
-      c: [
-        "電源を切っても残る",
-        "一時的に使われる",
-        "補助記憶装置",
-        "読み取り専用"
-      ],
-      a: 1,
-      e: "RAMは一時記憶装置です。"
-    },
-    {
-      q: "OSの役割はどれ？",
-      c: ["計算をする", "機器を管理する", "印刷する", "通信のみ行う"],
-      a: 1,
-      e: "OSはコンピュータ全体を管理します。"
-    }
+    { q: "CPUの役割は？", c: ["記憶", "演算", "表示", "印刷"], a: 1, e: "CPUは演算と制御を行う。" },
+    { q: "2進数10は10進数で？", c: ["1", "2", "3", "4"], a: 1, e: "10₂ = 2₁₀" },
+    { q: "RAMの特徴は？", c: ["電源で消える", "永久保存", "補助記憶", "ROM"], a: 0, e: "RAMは一時記憶。" },
+    { q: "OSの役割は？", c: ["計算", "管理", "印刷", "通信"], a: 1, e: "OSは全体管理。" }
   ],
-
   physics: [
-    {
-      q: "力の単位は？",
-      c: ["J", "W", "N", "kg"],
-      a: 2,
-      e: "力の単位はニュートン(N)です。"
-    }
+    { q: "力の単位は？", c: ["J", "W", "N", "kg"], a: 2, e: "N（ニュートン）" }
   ],
-
   english: [
-    {
-      q: "apple の意味は？",
-      c: ["犬", "りんご", "本", "車"],
-      a: 1,
-      e: "apple は りんご です。"
-    }
+    { q: "appleの意味は？", c: ["犬", "りんご", "本", "車"], a: 1, e: "りんご" }
   ]
 };
 
 // ===== 状態 =====
 let questions = [];
-let order = [];
 let index = 0;
-
 let correct = 0;
 let answered = 0;
-let counted = false;
+let answeredNow = false;
 
-// ===== シャッフル =====
+// ===== ユーティリティ =====
 function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
+  return arr.sort(() => Math.random() - 0.5);
 }
 
 // ===== 開始 =====
 function startQuiz(type) {
-  questions = data[type];
-  order = [...Array(questions.length).keys()];
-  shuffle(order);
+  questions = shuffle([...data[type]]);
+  questions.forEach(q => {
+    const zipped = q.c.map((c, i) => ({ c, i }));
+    shuffle(zipped);
+    q.c = zipped.map(z => z.c);
+    q.a = zipped.findIndex(z => z.i === q.a);
+  });
 
   index = 0;
   correct = 0;
   answered = 0;
-
-  document.getElementById("rate").textContent = "正答率：--%";
 
   document.getElementById("home").classList.add("hidden");
   document.getElementById("quiz").classList.remove("hidden");
@@ -88,77 +48,72 @@ function startQuiz(type) {
 
 // ===== 表示 =====
 function showQuestion() {
-  counted = false;
-
+  answeredNow = false;
   document.getElementById("result").textContent = "";
   document.getElementById("explanation").textContent = "";
 
-  const q = questions[order[index]];
+  const q = questions[index];
   document.getElementById("question").textContent = q.q;
 
-  const choicesDiv = document.getElementById("choices");
-  choicesDiv.innerHTML = "";
+  const choices = document.getElementById("choices");
+  choices.innerHTML = "";
 
-  let choices = q.c.map((text, i) => ({ text, index: i }));
-  shuffle(choices);
-
-  choices.forEach(choice => {
+  q.c.forEach((text, i) => {
     const btn = document.createElement("button");
-    btn.textContent = choice.text;
-    btn.onclick = () => checkAnswer(choice.index, btn);
-    choicesDiv.appendChild(btn);
+    btn.textContent = text;
+    btn.onclick = () => checkAnswer(i, btn);
+    choices.appendChild(btn);
   });
 }
 
 // ===== 判定 =====
-function checkAnswer(selected, btn) {
-  const q = questions[order[index]];
+function checkAnswer(i, btn) {
+  if (answeredNow) return;
+  answeredNow = true;
 
-  document.querySelectorAll("#choices button").forEach(b => {
-    b.classList.remove("correct", "wrong");
-  });
+  const q = questions[index];
+  const buttons = document.querySelectorAll("#choices button");
+  buttons.forEach(b => b.className = "");
 
-  if (selected === q.a) {
+  if (i === q.a) {
     btn.classList.add("correct");
-    document.getElementById("result").textContent = "⭕ 正解！";
+    correct++;
   } else {
     btn.classList.add("wrong");
-    document.getElementById("result").textContent = "❌ 不正解";
   }
 
-  if (!counted) {
-    counted = true;
-    answered++;
-    if (selected === q.a) correct++;
+  answered++;
+  document.getElementById("rate").textContent =
+    `正答率：${Math.round(correct / answered * 100)}%`;
 
-    const rate = Math.round((correct / answered) * 100);
-    document.getElementById("rate").textContent =
-      `正答率：${rate}%（${correct}/${answered}）`;
-
-    document.getElementById("explanation").textContent =
-      "解説：" + q.e;
-  }
+  document.getElementById("explanation").textContent = "解説：" + q.e;
 }
 
-// ===== 次 / 前 =====
+// ===== 移動 =====
 function nextQuestion() {
   index++;
-  if (index >= order.length) {
-    shuffle(order);
+  if (index >= questions.length) {
     index = 0;
+    shuffle(questions);
   }
   showQuestion();
 }
 
 function prevQuestion() {
-  if (index > 0) {
-    index--;
-    showQuestion();
-  }
+  if (index > 0) index--;
+  showQuestion();
 }
 
-// ===== ホーム =====
 function goHome() {
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("home").classList.remove("hidden");
 }
+
+// ===== メニュー =====
+document.getElementById("menuBtn").onclick = () => {
+  document.getElementById("menu").classList.toggle("hidden");
+};
+
+document.getElementById("darkToggle").onclick = () => {
+  document.documentElement.classList.toggle("dark");
+};
