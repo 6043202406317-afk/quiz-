@@ -1,11 +1,10 @@
-// ===== 問題データ =====
 const quizData = {
   it: [
     {
       q: "CPUの役割はどれ？",
       c: ["記憶", "演算", "表示", "印刷"],
       a: 1,
-      e: "CPUは計算や制御を行います。"
+      e: "CPUは計算や処理（演算）を行う装置です。"
     }
   ],
   physics: [
@@ -13,7 +12,7 @@ const quizData = {
       q: "速度の単位は？",
       c: ["m", "m/s", "kg", "N"],
       a: 1,
-      e: "速度の単位は m/s です。"
+      e: "速度は距離÷時間なので m/s です。"
     }
   ],
   english: [
@@ -21,7 +20,7 @@ const quizData = {
       q: "apple の意味は？",
       c: ["犬", "りんご", "走る", "青い"],
       a: 1,
-      e: "apple は りんご。"
+      e: "apple は「りんご」という意味です。"
     }
   ]
 };
@@ -33,31 +32,20 @@ let correctCount = 0;
 let answerCount = 0;
 let hasCounted = false;
 
-// ===== クイズ開始 =====
 function startQuiz(type) {
   questions = quizData[type];
-
-  // 状態リセット
   correctCount = 0;
   answerCount = 0;
   currentIndex = 0;
 
-  document.getElementById("rate").textContent = "正答率：--%";
-  document.getElementById("result").textContent = "";
-  document.getElementById("explanation").textContent = "";
-
   document.getElementById("home").style.display = "none";
   document.getElementById("quiz").style.display = "block";
-
-  const body = document.getElementById("body");
-  body.className = "";
-  body.classList.add("bg-" + type);
+  document.getElementById("body").className = "bg-" + type;
 
   shuffle();
   showQuestion();
 }
 
-// ===== シャッフル =====
 function shuffle() {
   order = [...Array(questions.length).keys()];
   for (let i = order.length - 1; i > 0; i--) {
@@ -66,32 +54,32 @@ function shuffle() {
   }
 }
 
-// ===== 問題表示 =====
 function showQuestion() {
   hasCounted = false;
-
   document.getElementById("result").textContent = "";
   document.getElementById("explanation").textContent = "";
+  document.getElementById("rate").textContent = "";
 
   const q = questions[order[currentIndex]];
   document.getElementById("question").textContent = q.q;
 
-  const div = document.getElementById("choices");
-  div.innerHTML = "";
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = "";
 
-  let choices = q.c.map((text, index) => ({ text, index }));
-  choices.sort(() => Math.random() - 0.5);
-
-  choices.forEach(choice => {
-    const btn = document.createElement("button");
-    btn.textContent = choice.text;
-    btn.onclick = () => checkAnswer(choice.index, btn);
-    div.appendChild(btn);
-  });
+  q.c
+    .map((text, index) => ({ text, index }))
+    .sort(() => Math.random() - 0.5)
+    .forEach(choice => {
+      const btn = document.createElement("button");
+      btn.textContent = choice.text;
+      btn.onclick = () => checkAnswer(choice.index, btn);
+      choicesDiv.appendChild(btn);
+    });
 }
 
-// ===== 回答 =====
 function checkAnswer(selectedIndex, btn) {
+  if (hasCounted) return;
+
   const q = questions[order[currentIndex]];
 
   if (selectedIndex === q.a) {
@@ -102,44 +90,29 @@ function checkAnswer(selectedIndex, btn) {
     document.getElementById("result").textContent = "❌ 不正解";
   }
 
-  if (!hasCounted) {
-    hasCounted = true;
-    answerCount++;
-    if (selectedIndex === q.a) correctCount++;
+  hasCounted = true;
+  answerCount++;
+  if (selectedIndex === q.a) correctCount++;
 
-    const rate = Math.round((correctCount / answerCount) * 100);
-    document.getElementById("rate").textContent =
-      `正答率：${rate}%（${correctCount}/${answerCount}）`;
+  const rate = Math.round((correctCount / answerCount) * 100);
+  document.getElementById("rate").textContent =
+    `正答率：${rate}%（${correctCount}/${answerCount}）`;
 
-    document.getElementById("explanation").textContent =
-      "解説：" + q.e;
-  }
+  document.getElementById("explanation").textContent = "解説：" + q.e;
 }
 
-// ===== 次の問題 =====
 function nextQuestion() {
   currentIndex++;
   if (currentIndex >= order.length) {
-    currentIndex = 0;
-    shuffle();
+    alert("クイズ終了！");
+    goHome();
+  } else {
+    showQuestion();
   }
-  showQuestion();
 }
 
-// ===== ホームに戻る（完全修正） =====
 function goHome() {
-  // 表示切替
   document.getElementById("quiz").style.display = "none";
   document.getElementById("home").style.display = "block";
-
-  // 状態完全リセット
-  questions = [];
-  order = [];
-  currentIndex = 0;
-  correctCount = 0;
-  answerCount = 0;
-  hasCounted = false;
-
-  // 背景色リセット
   document.getElementById("body").className = "";
 }
