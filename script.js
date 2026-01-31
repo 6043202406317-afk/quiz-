@@ -1,4 +1,3 @@
-// ===== 問題データ =====
 const data = {
   it: [
     { q: "CPUの役割は？", c: ["記憶", "演算", "表示", "印刷"], a: 1, e: "CPUは演算と制御を行います。" },
@@ -20,7 +19,7 @@ let correct = 0;
 let answered = 0;
 let counted = false;
 
-// ===== シャッフル =====
+/* シャッフル */
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -28,7 +27,7 @@ function shuffle(arr) {
   }
 }
 
-// ===== 開始 =====
+/* 開始 */
 function startQuiz(type) {
   questions = [...data[type]];
   shuffle(questions);
@@ -43,10 +42,9 @@ function startQuiz(type) {
   showQuestion();
 }
 
-// ===== 表示 =====
+/* 表示 */
 function showQuestion() {
   counted = false;
-
   document.getElementById("result").textContent = "";
   document.getElementById("explanation").textContent = "";
 
@@ -67,11 +65,10 @@ function showQuestion() {
   });
 }
 
-// ===== 判定（←ここが重要）=====
+/* 判定（何回でも押せる） */
 function checkAnswer(i, btn) {
   const q = questions[index];
 
-  // 色リセット（何回でも押せる）
   document.querySelectorAll("#choices button").forEach(b => {
     b.classList.remove("correct", "wrong");
   });
@@ -84,21 +81,19 @@ function checkAnswer(i, btn) {
     document.getElementById("result").textContent = "❌ 不正解";
   }
 
-  // 正答率は最初の1回だけ
   if (!counted) {
     counted = true;
     answered++;
     if (i === q.a) correct++;
 
-    const rate = Math.round((correct / answered) * 100);
     document.getElementById("rate").textContent =
-      `正答率：${rate}%（${correct}/${answered}）`;
+      `正答率：${Math.round((correct / answered) * 100)}%`;
 
     document.getElementById("explanation").textContent = "解説：" + q.e;
   }
 }
 
-// ===== 移動 =====
+/* 移動 */
 function nextQuestion() {
   index++;
   if (index >= questions.length) {
@@ -120,24 +115,18 @@ function goHome() {
   document.getElementById("home").classList.remove("hidden");
 }
 
-// ===== ☰ メニュー =====
+/* メニュー */
 const overlay = document.getElementById("menuOverlay");
+const menu = document.getElementById("menu");
 
 document.getElementById("menuBtn").onclick = () => {
   overlay.classList.toggle("hidden");
 };
 
-// メニュー外クリックで閉じる
-overlay.onclick = () => {
-  overlay.classList.add("hidden");
-};
+overlay.onclick = () => overlay.classList.add("hidden");
+menu.onclick = e => e.stopPropagation();
 
-// メニュー内クリックは閉じない
-document.getElementById("menu").onclick = e => {
-  e.stopPropagation();
-};
-
-// ダークモード
+/* ダークモード */
 document.getElementById("darkToggle").onclick = () => {
   document.body.classList.toggle("dark");
 };
