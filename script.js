@@ -2,7 +2,7 @@ const data = {
   it: [
     { q: "CPUの役割は？", c: ["記憶", "演算", "表示", "印刷"], a: 1, e: "CPUは演算と制御を行います。" },
     { q: "2進数の10は？", c: ["1", "2", "3", "4"], a: 1, e: "10進数で2です。" },
-    { q: "RAMの特徴は？", c: ["永続", "一時", "補助", "ROM"], a: 1, e: "RAMは一時記憶です。" }
+    { q: "RAMの特徴は？", c: ["永続的に記憶", "一時記憶", "補助記憶", "ROM"], a: 1, e: "RAMは一時記憶です。" }
   ],
   physics: [
     { q: "力の単位は？", c: ["J", "W", "N", "kg"], a: 2, e: "ニュートンです。" }
@@ -14,20 +14,21 @@ const data = {
 
 let questions = [];
 let index = 0;
-let locked = false;
+let correct = 0;
+let answered = 0;
 
-/* 開始 */
 function startQuiz(type) {
   questions = shuffle([...data[type]]);
   index = 0;
+  correct = 0;
+  answered = 0;
+  updateRate();
   document.getElementById("home").classList.add("hidden");
   document.getElementById("quiz").classList.remove("hidden");
   showQuestion();
 }
 
-/* 表示 */
 function showQuestion() {
-  locked = false;
   const q = questions[index];
   document.getElementById("question").textContent = q.q;
   document.getElementById("explanation").textContent = "";
@@ -43,27 +44,42 @@ function showQuestion() {
   });
 }
 
-/* 判定 */
 function answer(i, btn) {
-  if (locked) return;
-  locked = true;
   const q = questions[index];
 
-  if (i === q.a) btn.classList.add("correct");
-  else btn.classList.add("wrong");
+  // 色を一旦リセット
+  document.querySelectorAll("#choices button").forEach(b=>{
+    b.classList.remove("correct","wrong");
+  });
 
+  if (i === q.a) {
+    btn.classList.add("correct");
+    correct++;
+  } else {
+    btn.classList.add("wrong");
+  }
+
+  answered++;
+  updateRate();
   document.getElementById("explanation").textContent = "解説：" + q.e;
 }
 
-/* 移動 */
+function updateRate() {
+  const rate = answered ? Math.round((correct/answered)*100) : 0;
+  document.getElementById("rate").textContent =
+    `正答率：${rate}%（${correct}/${answered}）`;
+}
+
 function nextQuestion() {
   index = (index + 1) % questions.length;
   showQuestion();
 }
+
 function prevQuestion() {
   index = (index - 1 + questions.length) % questions.length;
   showQuestion();
 }
+
 function goHome() {
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("home").classList.remove("hidden");
@@ -83,12 +99,11 @@ overlay.onclick = () => {
   overlay.classList.add("hidden");
 };
 
-/* ダークモード */
+/* ダーク */
 document.getElementById("darkBtn").onclick = () => {
   document.documentElement.classList.toggle("dark");
 };
 
-/* シャッフル */
 function shuffle(a) {
   return a.sort(()=>Math.random()-0.5);
 }
