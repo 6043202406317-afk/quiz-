@@ -1,69 +1,45 @@
 body {
   font-family: sans-serif;
+  margin: 0;
+  padding: 0;
   text-align: center;
-  padding: 20px;
-  transition: background 0.3s;
 }
 
-/* 教科別背景 */
-.bg-it {
-  background: #fff7e6;
-}
-.bg-physics {
-  background: #e6f2ff;
-}
-.bg-english {
-  background: #f0e6ff;
+#home, #quiz {
+  padding: 30px;
 }
 
-/* 共通ボタン */
 button {
-  width: 90%;
-  font-size: 18px;
-  margin: 8px auto;
-  padding: 14px;
-  border-radius: 8px;
-  border: none;
-  display: block;
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-/* ホーム */
-#home button {
-  background: #ffffff;
-  border: 1px solid #aaa;
-}
-
-/* 選択肢 */
 #choices button {
-  background: #ffffff;
-  border: 1px solid #ccc;
+  display: block;
+  width: 80%;
+  margin: 10px auto;
 }
 
-/* 正解・不正解 */
 .correct {
-  background: #b6f2c2 !important;
+  background-color: #8bc34a;
+  color: white;
 }
+
 .wrong {
-  background: #f2b6b6 !important;
-}
-
-/* 次の問題 */
-#next {
-  background: #4caf50;
-  color: white;
-  margin-top: 16px;
-}
-
-/* ホームに戻る */
-#homeBtn {
-  background: #2196f3;
+  background-color: #f44336;
   color: white;
 }
 
-/* 解説 */
-#explanation {
-  background: #eeeeee;
-  padding: 10px;
-  border-radius: 6px;
-  margin-top: 8px;
+.bg-it {
+  background: #e3f2fd;
+}
+
+.bg-physics {
+  background: #e8f5e9;
+}
+
+.bg-english {
+  background: #fff3e0;
 }
