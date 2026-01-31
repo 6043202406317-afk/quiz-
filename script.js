@@ -60,7 +60,7 @@ let correct = 0;
 let answered = 0;
 let counted = false;
 
-// ===== シャッフル関数 =====
+// ===== シャッフル =====
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -89,6 +89,7 @@ function startQuiz(type) {
 // ===== 表示 =====
 function showQuestion() {
   counted = false;
+
   document.getElementById("result").textContent = "";
   document.getElementById("explanation").textContent = "";
 
@@ -98,13 +99,7 @@ function showQuestion() {
   const choicesDiv = document.getElementById("choices");
   choicesDiv.innerHTML = "";
 
-  // 選択肢を index 付きで作る
-  let choices = q.c.map((text, i) => ({
-    text,
-    index: i
-  }));
-
-  // 選択肢シャッフル
+  let choices = q.c.map((text, i) => ({ text, index: i }));
   shuffle(choices);
 
   choices.forEach(choice => {
@@ -119,12 +114,10 @@ function showQuestion() {
 function checkAnswer(selected, btn) {
   const q = questions[order[index]];
 
-  // ★ 色を全部リセット
   document.querySelectorAll("#choices button").forEach(b => {
     b.classList.remove("correct", "wrong");
   });
 
-  // ★ 押したボタンだけ色をつける
   if (selected === q.a) {
     btn.classList.add("correct");
     document.getElementById("result").textContent = "⭕ 正解！";
@@ -133,7 +126,6 @@ function checkAnswer(selected, btn) {
     document.getElementById("result").textContent = "❌ 不正解";
   }
 
-  // 正答率は最初の1回だけ
   if (!counted) {
     counted = true;
     answered++;
@@ -143,24 +135,21 @@ function checkAnswer(selected, btn) {
     document.getElementById("rate").textContent =
       `正答率：${rate}%（${correct}/${answered}）`;
 
-    document.getElementById("explanation").textContent = "解説：" + q.e;
+    document.getElementById("explanation").textContent =
+      "解説：" + q.e;
   }
 }
 
-// ===== 次の問題 =====
+// ===== 次 / 前 =====
 function nextQuestion() {
   index++;
-
-  // ★ 一周したら再シャッフルして最初へ
   if (index >= order.length) {
     shuffle(order);
     index = 0;
   }
-
   showQuestion();
 }
 
-// ===== 前の問題 =====
 function prevQuestion() {
   if (index > 0) {
     index--;
