@@ -1,126 +1,102 @@
+// ===== 問題データ =====
 const questions = [
   {
-    q: "CPUの役割はどれ？",
-    c: ["記憶", "演算", "表示", "印刷"],
-    a: 1,
-    e: "CPUはコンピュータの中で計算や制御を行う装置です。"
+    q: "HTMLでページのタイトルを指定するタグはどれ？",
+    choices: ["<head>", "<title>", "<meta>", "<body>"],
+    answer: 1,
+    explanation: "<title>タグで指定します。"
   },
   {
-    q: "2進数の10は10進数でいくつ？",
-    c: ["1", "2", "3", "4"],
-    a: 1,
-    e: "2進数の10は 1×2¹ + 0×2⁰ = 2 になります。"
-  },
-  {
-    q: "RAMの特徴として正しいものはどれ？",
-    c: [
-      "電源を切っても内容が残る",
-      "読み書きが高速な一時記憶",
-      "入力専用の装置",
-      "補助記憶装置である"
-    ],
-    a: 1,
-    e: "RAMは一時的にデータを保存する高速な記憶装置です。"
+    q: "JavaScriptで文字を表示する命令は？",
+    choices: ["print()", "console.log()", "echo()", "write()"],
+    answer: 1,
+    explanation: "console.log() を使います。"
   }
 ];
 
-// ===== 状態 =====
-let currentIndex = 0;
-let hasCounted = false;
+let current = 0;
+let correct = 0;
+let answered = false;
 
-let correctCount = 0;
-let answerCount = 0;
+// ===== 要素取得 =====
+const questionEl = document.getElementById("question");
+const choicesEl = document.getElementById("choices");
+const resultEl = document.getElementById("result");
+const explanationEl = document.getElementById("explanation");
+const rateEl = document.getElementById("rate");
 
-// 出題順
-let order = [];
-
-// ===== シャッフル =====
-function shuffle() {
-  order = [...Array(questions.length).keys()];
-  for (let i = order.length - 1; i > 0; i--) {
+// ===== 配列シャッフル =====
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [order[i], order[j]] = [order[j], order[i]];
+    [array[i], array[j]] = [array[j], array[i]];
   }
-  currentIndex = 0;
+  return array;
 }
 
 // ===== 問題表示 =====
 function showQuestion() {
-  hasCounted = false;
+  answered = false;
+  resultEl.textContent = "";
+  explanationEl.textContent = "";
+  choicesEl.innerHTML = "";
 
-  document.getElementById("result").textContent = "";
-  document.getElementById("explanation").textContent = "";
+  const q = questions[current];
+  questionEl.textContent = q.q;
 
-  const q = questions[order[currentIndex]];
-  document.getElementById("question").textContent = q.q;
-
-  const div = document.getElementById("choices");
-  div.innerHTML = "";
-
-  // 選択肢を index 付きで作成
-  let choices = q.c.map((text, index) => ({
+  // 選択肢をシャッフル
+  const shuffled = q.choices.map((text, index) => ({
     text,
     index
   }));
+  shuffle(shuffled);
 
-  // 選択肢シャッフル
-  for (let i = choices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [choices[i], choices[j]] = [choices[j], choices[i]];
-  }
-
-  // 表示
-  choices.forEach(choice => {
+  shuffled.forEach(choice => {
     const btn = document.createElement("button");
     btn.textContent = choice.text;
-    btn.onclick = () => checkAnswer(choice.index, btn);
-    div.appendChild(btn);
+    btn.style.display = "block";
+    btn.style.margin = "10px 0";
+    btn.onclick = () => checkAnswer(choice.index);
+    choicesEl.appendChild(btn);
   });
 }
 
-// ===== 回答処理 =====
-function checkAnswer(selectedIndex, btn) {
-  const q = questions[order[currentIndex]];
-  const result = document.getElementById("result");
-  const exp = document.getElementById("explanation");
+// ===== 正誤判定 =====
+function checkAnswer(selected) {
+  if (answered) return;
+  answered = true;
 
-  // 正誤表示（何回押してもOK）
-  if (selectedIndex === q.a) {
-    btn.style.background = "#b6f2c2";
-    result.textContent = "⭕ 正解！";
+  const q = questions[current];
+
+  if (selected === q.answer) {
+    resultEl.textContent = "⭕ 正解！";
+    correct++;
   } else {
-    btn.style.background = "#f2b6b6";
-    result.textContent = "❌ 不正解";
+    resultEl.textContent = "❌ 不正解";
   }
 
-  // 正答率は最初の1回だけ
-  if (!hasCounted) {
-    hasCounted = true;
-    answerCount++;
+  explanationEl.textContent = q.explanation;
+  updateRate();
+}
 
-    if (selectedIndex === q.a) {
-      correctCount++;
-    }
-
-    const rate = Math.round((correctCount / answerCount) * 100);
-    document.getElementById("rate").textContent =
-      `正答率：${rate}%（${correctCount}/${answerCount}）`;
-
-    exp.textContent = "解説：" + q.e;
-  }
+// ===== 正答率 =====
+function updateRate() {
+  const rate = Math.round((correct / (current + 1)) * 100);
+  rateEl.textContent = `正答率：${rate}%`;
 }
 
 // ===== 次の問題 =====
 function nextQuestion() {
-  currentIndex++;
-
-  if (currentIndex >= order.length) {
-    shuffle(); // 1周したら静かにリセット
+  if (current < questions.length - 1) {
+    current++;
+    showQuestion();
+  } else {
+    questionEl.textContent = "終了！";
+    choicesEl.innerHTML = "";
+    resultEl.textContent = "";
+    explanationEl.textContent = `最終正答率：${Math.round((correct / questions.length) * 100)}%`;
   }
-
-  showQuestion();
 }
 
-// ===== 初期化 =====
-shuffle();
+// ===== 初期表示 =====
 showQuestion();
