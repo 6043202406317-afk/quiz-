@@ -1,70 +1,74 @@
 body {
   font-family: sans-serif;
-  margin: 0;
-  padding: 0;
   text-align: center;
-}
-
-/* ホーム */
-#home {
-  padding: 40px 20px;
-}
-
-.subject-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  max-width: 300px;
-  margin: 0 auto;
-}
-
-.subject-list button {
-  padding: 15px;
-  font-size: 18px;
-}
-
-/* クイズ */
-#quiz {
+  margin: 0;
   padding: 20px;
+  background: #f0f0f0;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ホーム画面 */
+#home h1 {
+  margin-bottom: 20px;
+}
+
+.subject {
+  display: block;
+  width: 90%;
+  margin: 12px auto;
+  padding: 18px;
+  font-size: 20px;
+}
+
+/* 問題画面 */
+#quiz {
+  background: #ffffff; /* ← 白背景 */
+  padding: 20px;
+  border-radius: 10px;
+}
+
+#question {
+  font-size: 20px;
+  margin-bottom: 16px;
 }
 
 #choices button {
-  display: block;
   width: 90%;
-  margin: 10px auto;
-  padding: 12px;
-  font-size: 16px;
+  margin: 8px auto;
+  padding: 14px;
+  font-size: 18px;
 }
 
-/* 正誤 */
+/* 正解だけ薄緑 */
 .correct {
-  background-color: #c8e6c9;
+  background: #c8f7c5;
 }
 
 .wrong {
-  background-color: #ffcdd2;
+  background: #f7c5c5;
 }
 
-/* ボタン色 */
-.next {
-  background: #1976d2;
-  color: white;
+/* ナビゲーション */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
 }
 
-.home {
-  background: #555;
-  color: white;
+.nav button {
+  width: 45%;
+  padding: 16px;
+  font-size: 18px;
 }
 
-/* 教科別背景 */
-.bg-it {
-  background: #e3f2fd;
-}
-
-.bg-physics {
-  background: #e8f5e9;
-}
-
-.bg-english {
-  background: #fff3e0;
+/* ホームに戻る */
+#homeBtn {
+  margin-top: 24px;
+  width: 90%;
+  padding: 18px;
+  font-size: 18px;
+  background: #ddd;
 }
