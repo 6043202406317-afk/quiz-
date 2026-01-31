@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>過去問道場</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ☰ は常に表示 -->
 <div id="menuBtn">☰</div>
 
-<!-- サイドメニュー -->
 <div id="sideMenu" class="hidden">
   <h2>設定</h2>
   <button id="darkBtn">ダークモード</button>
@@ -28,8 +27,13 @@
 
 <!-- 問題画面 -->
 <div id="quiz" class="screen hidden">
+  <p id="rate">正答率：--%</p>
+
   <div id="question"></div>
+
   <div id="choices"></div>
+
+  <div id="explanation"></div>
 
   <div class="nav">
     <button onclick="prevQuestion()">前の問題</button>
@@ -37,8 +41,6 @@
   </div>
 
   <button class="homeBtn" onclick="goHome()">ホーム画面</button>
-
-  <div id="explanation"></div>
 </div>
 
 <script src="script.js"></script>
