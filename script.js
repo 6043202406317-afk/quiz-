@@ -1,15 +1,16 @@
+// ===== 問題 =====
 const data = {
   it: [
     { q: "CPUの役割は？", c: ["記憶", "演算", "表示", "印刷"], a: 1, e: "CPUは演算と制御を行います。" },
-    { q: "2進数の10は？", c: ["1", "2", "3", "4"], a: 1, e: "10(2) = 2(10)" },
-    { q: "RAMの特徴は？", c: ["永続", "一時記憶", "補助記憶", "ROM"], a: 1, e: "RAMは一時記憶装置です。" },
+    { q: "2進数の10は？", c: ["1", "2", "3", "4"], a: 1, e: "2進数10 = 10進数2" },
+    { q: "RAMの特徴は？", c: ["永続", "一時", "補助記憶", "ROM"], a: 1, e: "RAMは一時記憶です。" },
     { q: "OSの役割は？", c: ["計算", "管理", "印刷", "通信"], a: 1, e: "OSは全体を管理します。" }
   ],
   physics: [
-    { q: "力の単位は？", c: ["J", "W", "N", "kg"], a: 2, e: "ニュートン(N)" }
+    { q: "力の単位は？", c: ["J", "W", "N", "kg"], a: 2, e: "N（ニュートン）です。" }
   ],
   english: [
-    { q: "appleの意味は？", c: ["犬", "りんご", "本", "車"], a: 1, e: "りんご" }
+    { q: "appleの意味は？", c: ["犬", "りんご", "本", "車"], a: 1, e: "りんごです。" }
   ]
 };
 
@@ -17,34 +18,23 @@ let questions = [];
 let index = 0;
 let correct = 0;
 let answered = 0;
-let counted = false;
+let locked = false;
 
-/* シャッフル */
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-}
-
-/* 開始 */
+// ===== 開始 =====
 function startQuiz(type) {
-  questions = [...data[type]];
-  shuffle(questions);
-
+  questions = shuffle([...data[type]]);
   index = 0;
   correct = 0;
   answered = 0;
 
   document.getElementById("home").classList.add("hidden");
   document.getElementById("quiz").classList.remove("hidden");
-
   showQuestion();
 }
 
-/* 表示 */
+// ===== 表示 =====
 function showQuestion() {
-  counted = false;
+  locked = false;
   document.getElementById("result").textContent = "";
   document.getElementById("explanation").textContent = "";
 
@@ -54,79 +44,70 @@ function showQuestion() {
   const choices = document.getElementById("choices");
   choices.innerHTML = "";
 
-  let arr = q.c.map((t, i) => ({ t, i }));
-  shuffle(arr);
-
-  arr.forEach(c => {
+  const shuffled = shuffle(q.c.map((t, i) => ({ t, i })));
+  shuffled.forEach(obj => {
     const btn = document.createElement("button");
-    btn.textContent = c.t;
-    btn.onclick = () => checkAnswer(c.i, btn);
+    btn.textContent = obj.t;
+    btn.onclick = () => checkAnswer(obj.i, btn);
     choices.appendChild(btn);
   });
 }
 
-/* 判定（何回でも押せる） */
+// ===== 判定 =====
 function checkAnswer(i, btn) {
+  if (locked) return;
+  locked = true;
+
   const q = questions[index];
-
-  document.querySelectorAll("#choices button").forEach(b => {
-    b.classList.remove("correct", "wrong");
-  });
-
   if (i === q.a) {
     btn.classList.add("correct");
-    document.getElementById("result").textContent = "⭕ 正解！";
+    correct++;
   } else {
     btn.classList.add("wrong");
-    document.getElementById("result").textContent = "❌ 不正解";
   }
 
-  if (!counted) {
-    counted = true;
-    answered++;
-    if (i === q.a) correct++;
+  answered++;
+  document.getElementById("rate").textContent =
+    `正答率：${Math.round(correct / answered * 100)}%`;
 
-    document.getElementById("rate").textContent =
-      `正答率：${Math.round((correct / answered) * 100)}%`;
-
-    document.getElementById("explanation").textContent = "解説：" + q.e;
-  }
+  document.getElementById("explanation").textContent = "解説：" + q.e;
 }
 
-/* 移動 */
+// ===== 移動 =====
 function nextQuestion() {
-  index++;
-  if (index >= questions.length) {
-    shuffle(questions);
-    index = 0;
-  }
+  index = (index + 1) % questions.length;
   showQuestion();
 }
-
 function prevQuestion() {
-  if (index > 0) {
-    index--;
-    showQuestion();
-  }
+  index = (index - 1 + questions.length) % questions.length;
+  showQuestion();
 }
-
 function goHome() {
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("home").classList.remove("hidden");
 }
 
-/* メニュー */
-const overlay = document.getElementById("menuOverlay");
-const menu = document.getElementById("menu");
+// ===== メニュー =====
+const menuBtn = document.getElementById("menuBtn");
+const sideMenu = document.getElementById("sideMenu");
+const overlay = document.getElementById("overlay");
 
-document.getElementById("menuBtn").onclick = () => {
+menuBtn.onclick = () => {
+  sideMenu.classList.toggle("hidden");
   overlay.classList.toggle("hidden");
 };
 
-overlay.onclick = () => overlay.classList.add("hidden");
-menu.onclick = e => e.stopPropagation();
-
-/* ダークモード */
-document.getElementById("darkToggle").onclick = () => {
-  document.body.classList.toggle("dark");
+overlay.onclick = () => {
+  sideMenu.classList.add("hidden");
+  overlay.classList.add("hidden");
 };
+
+// ===== ダークモード =====
+document.getElementById("darkBtn").onclick = () => {
+  document.documentElement.classList.toggle("dark");
+};
+
+// ===== シャッフル =====
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
