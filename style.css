@@ -10,7 +10,7 @@ body {
   display: none;
 }
 
-/* ホーム画面 */
+/* ===== ホーム画面 ===== */
 #home h1 {
   margin-bottom: 20px;
 }
@@ -23,11 +23,11 @@ body {
   font-size: 20px;
 }
 
-/* 問題画面 */
+/* ===== 問題画面 ===== */
 #quiz {
-  background: #ffffff; /* ← 白背景 */
+  background: #ffffff; /* 白背景 */
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 #question {
@@ -42,7 +42,7 @@ body {
   font-size: 18px;
 }
 
-/* 正解だけ薄緑 */
+/* 正解・不正解 */
 .correct {
   background: #c8f7c5;
 }
@@ -71,4 +71,14 @@ body {
   padding: 18px;
   font-size: 18px;
   background: #ddd;
+}
+
+/* 解説（薄い青背景） */
+#explanation {
+  margin-top: 12px;
+  font-size: 16px;
+  background: #e8f4ff;
+  padding: 12px;
+  border-radius: 8px;
+  line-height: 1.5;
 }
