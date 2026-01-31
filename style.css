@@ -5,33 +5,58 @@ body {
   text-align: center;
 }
 
-#home, #quiz {
-  padding: 30px;
+/* ホーム */
+#home {
+  padding: 40px 20px;
 }
 
-button {
-  margin: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
+.subject-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.subject-list button {
+  padding: 15px;
+  font-size: 18px;
+}
+
+/* クイズ */
+#quiz {
+  padding: 20px;
 }
 
 #choices button {
   display: block;
-  width: 80%;
+  width: 90%;
   margin: 10px auto;
+  padding: 12px;
+  font-size: 16px;
 }
 
+/* 正誤 */
 .correct {
-  background-color: #8bc34a;
-  color: white;
+  background-color: #c8e6c9;
 }
 
 .wrong {
-  background-color: #f44336;
+  background-color: #ffcdd2;
+}
+
+/* ボタン色 */
+.next {
+  background: #1976d2;
   color: white;
 }
 
+.home {
+  background: #555;
+  color: white;
+}
+
+/* 教科別背景 */
 .bg-it {
   background: #e3f2fd;
 }
