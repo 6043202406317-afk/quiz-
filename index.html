@@ -7,33 +7,31 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body id="body">
-
-<!-- ホーム画面 -->
-<div id="home">
-  <h1>過去問道場</h1>
-
-  <div class="subject-list">
-    <button onclick="startQuiz('it')">情報技術（テスト）</button>
-    <button onclick="startQuiz('physics')">物理</button>
-    <button onclick="startQuiz('english')">英単語</button>
+<body>
+  <!-- ホーム画面 -->
+  <div id="home">
+    <h1>過去問道場</h1>
+    <button class="subject" onclick="startQuiz('it')">情報技術（テスト）</button>
+    <button class="subject" onclick="startQuiz('physics')">物理</button>
+    <button class="subject" onclick="startQuiz('english')">英単語</button>
   </div>
-</div>
 
-<!-- クイズ画面 -->
-<div id="quiz" style="display:none;">
-  <h2 id="question"></h2>
+  <!-- 問題画面 -->
+  <div id="quiz" class="hidden">
+    <p id="rate">正答率：--%</p>
+    <h2 id="question"></h2>
+    <div id="choices"></div>
+    <p id="result"></p>
+    <p id="explanation"></p>
 
-  <div id="choices"></div>
+    <div class="nav">
+      <button id="prev" onclick="prevQuestion()">前の問題</button>
+      <button id="next" onclick="nextQuestion()">次の問題</button>
+    </div>
 
-  <p id="result"></p>
-  <p id="explanation"></p>
-  <p id="rate"></p>
+    <button id="homeBtn" onclick="goHome()">ホーム画面</button>
+  </div>
 
-  <button class="next" onclick="nextQuestion()">次の問題</button>
-  <button class="home" onclick="goHome()">ホームに戻る</button>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
