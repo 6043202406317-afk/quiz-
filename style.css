@@ -1,8 +1,7 @@
 body {
   font-family: sans-serif;
   text-align: center;
-  margin: 0;
-  padding: 10px;
+  padding: 20px;
 }
 
 h1 {
@@ -12,17 +11,26 @@ h1 {
 button {
   width: 90%;
   max-width: 400px;
-  padding: 15px;
-  margin: 10px auto;
   font-size: 18px;
+  margin: 8px auto;
+  padding: 14px;
   display: block;
 }
 
-#choices button {
-  font-size: 16px;
+#question {
+  font-size: 20px;
+  margin-bottom: 16px;
 }
 
 #result {
-  font-weight: bold;
-  margin-top: 10px;
+  font-size: 18px;
+  margin-top: 12px;
+}
+
+#explanation {
+  margin-top: 8px;
+  font-size: 16px;
+  background: #f2f2f2;
+  padding: 10px;
+  border-radius: 6px;
 }
