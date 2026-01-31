@@ -15,10 +15,10 @@ body {
   left: 10px;
   font-size: 28px;
   cursor: pointer;
-  z-index: 300;
+  z-index: 1000;
 }
 
-/* メニュー背景（外側クリック用） */
+/* メニュー外背景 */
 #menuOverlay {
   position: fixed;
   top: 0;
@@ -26,19 +26,19 @@ body {
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.3);
-  z-index: 200;
+  z-index: 900;
 }
 
-/* メニュー本体 */
+/* メニュー本体（小さく） */
 #menu {
-  width: 66%;
+  width: 50%;        /* ← ここ重要 */
   height: 100%;
   background: #ddd;
   padding: 20px;
 }
 
 #menu h2 {
-  font-size: 28px;
+  font-size: 26px;
   margin-bottom: 20px;
 }
 
@@ -89,7 +89,6 @@ body {
 .correct {
   background: #b6f2c2 !important;
 }
-
 .wrong {
   background: #f2b6b6 !important;
 }
