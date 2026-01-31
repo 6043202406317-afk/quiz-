@@ -7,36 +7,29 @@
 </head>
 <body>
 
-<!-- ☰ メニュー -->
+<!-- ☰ は常に表示 -->
 <div id="menuBtn">☰</div>
 
 <!-- サイドメニュー -->
 <div id="sideMenu" class="hidden">
   <h2>設定</h2>
   <button id="darkBtn">ダークモード</button>
-  <button id="nameBtn">禪院 直哉</button>
+  <button>禪院 直哉</button>
 </div>
-
-<!-- 背景クリック用 -->
 <div id="overlay" class="hidden"></div>
 
 <!-- ホーム画面 -->
-<div id="home">
+<div id="home" class="screen">
   <h1>過去問道場</h1>
   <button onclick="startQuiz('it')">情報技術（テスト）</button>
   <button onclick="startQuiz('physics')">物理</button>
   <button onclick="startQuiz('english')">英語</button>
 </div>
 
-<!-- クイズ画面 -->
-<div id="quiz" class="hidden">
+<!-- 問題画面 -->
+<div id="quiz" class="screen hidden">
   <div id="question"></div>
-
   <div id="choices"></div>
-
-  <div id="result"></div>
-  <div id="explanation"></div>
-  <div id="rate"></div>
 
   <div class="nav">
     <button onclick="prevQuestion()">前の問題</button>
@@ -44,6 +37,8 @@
   </div>
 
   <button class="homeBtn" onclick="goHome()">ホーム画面</button>
+
+  <div id="explanation"></div>
 </div>
 
 <script src="script.js"></script>
