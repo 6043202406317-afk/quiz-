@@ -5,20 +5,18 @@ body {
   transition: background 0.3s;
 }
 
-/* 教科別背景色 */
+/* 教科別背景 */
 .bg-it {
   background: #fff7e6;
 }
-
 .bg-physics {
   background: #e6f2ff;
 }
-
 .bg-english {
   background: #f0e6ff;
 }
 
-/* 共通 */
+/* 共通ボタン */
 button {
   width: 90%;
   font-size: 18px;
@@ -41,12 +39,10 @@ button {
   border: 1px solid #ccc;
 }
 
-/* 正解だけ薄緑 */
+/* 正解・不正解 */
 .correct {
   background: #b6f2c2 !important;
 }
-
-/* 不正解 */
 .wrong {
   background: #f2b6b6 !important;
 }
