@@ -4,6 +4,7 @@ body {
   background: #f5f5f5;
 }
 
+/* 画面切替 */
 .screen {
   display: none;
   padding: 20px;
@@ -13,47 +14,54 @@ body {
   display: block;
 }
 
+/* タイトル */
 .title {
   text-align: center;
-  font-size: 2rem;
-  margin-bottom: 30px;
+  font-size: 2.2rem;
+  margin: 30px 0;
 }
 
+/* 教科選択 */
 .subject-list {
+  max-width: 400px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
 }
 
 .subject-list button {
-  padding: 18px;
-  font-size: 1.1rem;
+  padding: 20px;
+  font-size: 1.2rem;
   background: white;
   border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
+/* 正答率 */
 .status {
   text-align: center;
   font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.question {
-  font-size: 1.2rem;
   margin-bottom: 20px;
 }
 
+/* 問題文 */
+.question {
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+}
+
+/* 選択肢 */
 .choices {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .choices button {
-  padding: 15px;
-  font-size: 1rem;
-  border-radius: 10px;
+  padding: 18px;
+  font-size: 1.1rem;
+  border-radius: 12px;
   border: 1px solid #ccc;
   background: white;
 }
@@ -66,21 +74,33 @@ body {
   background: #f5b7b7;
 }
 
+/* 解説 */
 .explanation {
-  margin-top: 15px;
-  font-size: 0.95rem;
+  margin-top: 16px;
+  font-size: 1rem;
 }
 
-.nav {
+/* ナビ */
+.nav-row {
   margin-top: 25px;
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
 }
 
-.nav button {
+.nav-row button {
   flex: 1;
-  padding: 15px;
-  font-size: 1rem;
-  border-radius: 10px;
+  padding: 18px;
+  font-size: 1.05rem;
+  border-radius: 12px;
+}
+
+.nav-home {
+  margin-top: 15px;
+}
+
+.nav-home button {
+  width: 100%;
+  padding: 18px;
+  font-size: 1.05rem;
+  border-radius: 12px;
 }
