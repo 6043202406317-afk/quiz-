@@ -1,128 +1,92 @@
-const data = {
-  it: [
+const questions = {
+  info: [
+    {
+      q: "2進数で101は10進数でいくつ？",
+      choices: ["3", "4", "5", "6"],
+      answer: "5"
+    },
     {
       q: "CPUの役割はどれ？",
-      c: ["記憶", "演算と制御", "表示", "通信"],
-      a: 1,
-      e: "CPUは演算と制御を行います。"
-    },
-    {
-      q: "2進数の10は10進数でいくつ？",
-      c: ["1", "2", "3", "4"],
-      a: 1,
-      e: "2進数の10は10進数で2です。"
-    },
-    {
-      q: "RAMの特徴はどれ？",
-      c: ["電源を切っても残る", "一時的に使う", "補助記憶装置", "読み取り専用"],
-      a: 1,
-      e: "RAMは一時的に使われる記憶装置です。"
-    },
-    {
-      q: "OSの役割はどれ？",
-      c: ["計算を行う", "機器や資源を管理する", "印刷する", "通信だけする"],
-      a: 1,
-      e: "OSはコンピュータ全体を管理します。"
+      choices: ["記憶", "演算", "表示", "通信"],
+      answer: "演算"
     }
-  ],
-  physics: [
-    {
-      q: "力の単位は？",
-      c: ["J", "N", "W", "kg"],
-      a: 1,
-      e: "力の単位はニュートン(N)です。"
-    }
-  ],
-  english: [
-    {
-      q: "apple の意味は？",
-      c: ["犬", "りんご", "本", "車"],
-      a: 1,
-      e: "apple は りんご です。"
-    }
+    // ← ここに前までの問題をどんどん追加
   ]
 };
 
-let questions = [];
+let order = [];
 let index = 0;
-let answeredSet = new Set();
+let answered = {}; // 回答済み記録
 let correct = 0;
 
-function shuffle(arr) {
-  return arr.sort(() => Math.random() - 0.5);
-}
-
-function startQuiz(type) {
-  questions = shuffle([...data[type]]);
+function startQuiz(subject) {
+  order = [...questions[subject]];
+  shuffle(order);
   index = 0;
+  answered = {};
   correct = 0;
-  answeredSet.clear();
-  showScreen("quiz");
+
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+
   showQuestion();
-}
-
-function showScreen(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-function showQuestion() {
-  const q = questions[index];
-  document.getElementById("question").textContent = q.q;
-  document.getElementById("explanation").textContent = "";
-
-  const choices = document.getElementById("choices");
-  choices.innerHTML = "";
-
-  shuffle(q.c.map((t, i) => ({ t, i }))).forEach(choice => {
-    const btn = document.createElement("button");
-    btn.textContent = choice.t;
-    btn.onclick = () => selectAnswer(choice.i, btn);
-    choices.appendChild(btn);
-  });
-
   updateStatus();
 }
 
-function selectAnswer(i, btn) {
-  if (!answeredSet.has(index)) {
-    answeredSet.add(index);
-    if (i === questions[index].a) correct++;
-  }
+function showQuestion() {
+  const q = order[index];
+  document.getElementById("question").textContent = q.q;
 
-  document.querySelectorAll(".choices button").forEach(b => {
-    b.classList.remove("correct", "wrong");
+  const choices = shuffle([...q.choices]);
+  const area = document.getElementById("choices");
+  area.innerHTML = "";
+
+  choices.forEach(c => {
+    const btn = document.createElement("button");
+    btn.textContent = c;
+    btn.className = "choice";
+    btn.onclick = () => selectAnswer(c);
+    area.appendChild(btn);
   });
+}
 
-  btn.classList.add(i === questions[index].a ? "correct" : "wrong");
-  document.getElementById("explanation").textContent = questions[index].e;
+function selectAnswer(choice) {
+  if (answered[index]) return; // 選び直し無効
+
+  answered[index] = true;
+  if (choice === order[index].answer) {
+    correct++;
+  }
   updateStatus();
 }
 
 function updateStatus() {
-  const rate =
-    answeredSet.size === 0 ? 0 : Math.round((correct / answeredSet.size) * 100);
-  document.getElementById("status").textContent =
-    `正答率 ${rate}%（${answeredSet.size} / ${questions.length}）`;
+  const answeredCount = Object.keys(answered).length;
+  const rate = answeredCount === 0 ? 0 : Math.round(correct / answeredCount * 100);
+  document.getElementById("rate").textContent = rate + "%";
+  document.getElementById("count").textContent =
+    `(${answeredCount} / ${order.length})`;
 }
 
 function nextQuestion() {
-  index++;
-  if (index >= questions.length) {
-    // 1周したらリセット
-    index = 0;
-    correct = 0;
-    answeredSet.clear();
-    questions = shuffle(questions);
-  }
+  index = (index + 1) % order.length;
   showQuestion();
 }
 
 function prevQuestion() {
-  index = (index - 1 + questions.length) % questions.length;
+  index = (index - 1 + order.length) % order.length;
   showQuestion();
 }
 
 function goHome() {
-  showScreen("home");
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("home").classList.remove("hidden");
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
