@@ -1,49 +1,197 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>過去問道場</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>過去問道場</title>
+
+<style>
+:root{
+  --bg:#ffffff;
+  --text:#000000;
+  --btn:#ffffff;
+  --btn-border:#999;
+  --correct:#8bc34a;
+  --wrong:#f44336;
+}
+.dark{
+  --bg:#121212;
+  --text:#ffffff;
+  --btn:#1e1e1e;
+  --btn-border:#aaa;
+}
+body{
+  margin:0;
+  font-family:sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+.hidden{display:none;}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+}
+.menu{
+  font-size:28px;
+  cursor:pointer;
+  color:gray;
+}
+.menu-panel{
+  position:fixed;
+  top:0;
+  left:0;
+  width:70%;
+  height:100%;
+  background:var(--bg);
+  padding:20px;
+  box-shadow:2px 0 10px rgba(0,0,0,0.3);
+}
+.menu-panel button{
+  display:block;
+  width:100%;
+  padding:15px;
+  margin:10px 0;
+  font-size:18px;
+}
+
+.center{
+  text-align:center;
+}
+
+button{
+  background:var(--btn);
+  color:var(--text);
+  border:1px solid var(--btn-border);
+  border-radius:8px;
+  padding:15px;
+  font-size:18px;
+  margin:10px auto;
+  width:90%;
+  display:block;
+}
+
+.option.correct{background:var(--correct); color:#000;}
+.option.wrong{background:var(--wrong); color:#fff;}
+
+.nav{
+  display:flex;
+  justify-content:space-around;
+  margin-top:20px;
+}
+
+.explain{
+  margin:20px;
+  font-size:16px;
+}
+</style>
 </head>
+
 <body>
 
-<div id="menuBtn">☰</div>
+<header>
+  <div class="menu" onclick="toggleMenu()">☰</div>
+  <div>過去問道場</div>
+</header>
 
-<div id="settings" class="hidden">
-  <div class="settings-title">設定</div>
-  <button id="darkBtn">ダークモード</button>
+<!-- メニュー -->
+<div id="menu" class="menu-panel hidden">
+  <button onclick="toggleDark()">ダークモード</button>
   <button>禪院 直哉</button>
 </div>
 
 <!-- ホーム -->
-<div id="home" class="screen">
-  <h1>過去問道場</h1>
-
-  <!-- ★中央寄せ用ラッパー -->
-  <div class="home-buttons">
-    <button onclick="startQuiz('it')">情報技術（テスト）</button>
-    <button onclick="startQuiz('physics')">物理</button>
-    <button onclick="startQuiz('english')">英語</button>
-  </div>
+<div id="home" class="center">
+  <button onclick="start('physics')">物理</button>
+  <button onclick="start('english')">英語</button>
 </div>
 
-<!-- クイズ -->
-<div id="quiz" class="screen hidden">
-  <div id="rate">正答率：0%</div>
-
-  <div id="question"></div>
-  <div id="choices"></div>
-  <div id="explanation"></div>
+<!-- 問題画面 -->
+<div id="quiz" class="hidden">
+  <div class="center" id="rate"></div>
+  <div class="center" id="question"></div>
+  <div id="options"></div>
+  <div class="explain" id="explain"></div>
 
   <div class="nav">
-    <button onclick="prevQuestion()">前の問題</button>
-    <button onclick="nextQuestion()">次の問題</button>
+    <button onclick="prevQ()">前の問題</button>
+    <button onclick="goHome()">ホーム画面</button>
+    <button onclick="nextQ()">次の問題</button>
   </div>
-
-  <button class="homeBtn" onclick="goHome()">ホーム画面</button>
 </div>
 
-<script src="script.js"></script>
+<script>
+const data={
+  physics:[
+    {q:"力の単位は？", o:["N","J","W","Pa"], a:0, e:"ニュートン(N)"},
+    {q:"速さの式は？", o:["距離÷時間","時間÷距離","距離×時間","力×距離"], a:0, e:"v=距離÷時間"}
+  ],
+  english:[
+    {q:"I ___ a pen.", o:["have","has","had","having"], a:0, e:"主語がIなのでhave"},
+    {q:"appleの複数形は？", o:["apples","applees","appls","apple"], a:0, e:"普通にs"}
+  ]
+};
+
+let subject, qs, idx=0, answered=[];
+
+function shuffle(arr){
+  return arr.sort(()=>Math.random()-0.5);
+}
+
+function start(s){
+  subject=s;
+  qs=shuffle([...data[s]]);
+  qs.forEach(q=>q.o=shuffle(q.o));
+  idx=0;
+  answered=[];
+  home.classList.add("hidden");
+  quiz.classList.remove("hidden");
+  show();
+}
+
+function show(){
+  const q=qs[idx];
+  question.textContent=q.q;
+  options.innerHTML="";
+  explain.textContent="";
+  q.o.forEach((opt,i)=>{
+    const b=document.createElement("button");
+    b.textContent=opt;
+    b.className="option";
+    b.onclick=()=>{
+      if(answered[idx]===undefined){
+        answered[idx]=(opt===q.o[q.a]);
+      }
+      b.classList.add(opt===q.o[q.a]?"correct":"wrong");
+      explain.textContent=q.e;
+      updateRate();
+    };
+    options.appendChild(b);
+  });
+  updateRate();
+}
+
+function updateRate(){
+  const total=answered.filter(v=>v!==undefined).length;
+  const ok=answered.filter(v=>v).length;
+  rate.textContent=`正答率 ${total?Math.round(ok/total*100):0}%（${ok}/${total}）`;
+}
+
+function nextQ(){ if(idx<qs.length-1){idx++; show();}}
+function prevQ(){ if(idx>0){idx--; show();}}
+function goHome(){
+  quiz.classList.add("hidden");
+  home.classList.remove("hidden");
+}
+
+function toggleMenu(){
+  menu.classList.toggle("hidden");
+}
+function toggleDark(){
+  document.body.classList.toggle("dark");
+}
+</script>
 </body>
 </html>
