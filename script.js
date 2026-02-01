@@ -2,10 +2,11 @@ const data = {
   it: [
     { q: "CPUの役割は？", c: ["記憶", "演算", "表示", "印刷"], a: 1, e: "CPUは演算と制御を行います。" },
     { q: "2進数の10は？", c: ["1", "2", "3", "4"], a: 1, e: "10進数で2です。" },
-    { q: "RAMの特徴は？", c: ["永続", "一時", "補助", "ROM"], a: 1, e: "RAMは一時記憶です。" }
+    { q: "RAMの特徴は？", c: ["永続", "一時", "補助", "ROM"], a: 1, e: "RAMは一時記憶装置です。" },
+    { q: "OSの役割は？", c: ["計算", "管理", "印刷", "保存"], a: 1, e: "OSは全体を管理します。" }
   ],
   physics: [
-    { q: "力の単位は？", c: ["J", "W", "N", "kg"], a: 2, e: "ニュートンです。" }
+    { q: "力の単位は？", c: ["J", "W", "N", "kg"], a: 2, e: "ニュートン(N)です。" }
   ],
   english: [
     { q: "appleの意味は？", c: ["犬", "りんご", "本", "車"], a: 1, e: "りんごです。" }
@@ -16,7 +17,7 @@ let questions = [];
 let index = 0;
 let correct = 0;
 let answered = 0;
-let counted = false; // ← 重要
+let counted = false;
 
 function startQuiz(type) {
   questions = shuffle([...data[type]]);
@@ -30,7 +31,7 @@ function startQuiz(type) {
 }
 
 function showQuestion() {
-  counted = false; // ← 問題ごとにリセット
+  counted = false;
   const q = questions[index];
   document.getElementById("question").textContent = q.q;
   document.getElementById("explanation").textContent = "";
@@ -49,7 +50,6 @@ function showQuestion() {
 function answer(i, btn) {
   const q = questions[index];
 
-  // 色リセット
   document.querySelectorAll("#choices button").forEach(b=>{
     b.classList.remove("correct","wrong");
   });
@@ -57,7 +57,6 @@ function answer(i, btn) {
   if (i === q.a) btn.classList.add("correct");
   else btn.classList.add("wrong");
 
-  // ★ 正答率は最初の1回だけ
   if (!counted) {
     counted = true;
     answered++;
@@ -69,7 +68,7 @@ function answer(i, btn) {
 }
 
 function updateRate() {
-  const rate = answered ? Math.round((correct/answered)*100) : 0;
+  const rate = answered ? Math.round((correct / answered) * 100) : 0;
   document.getElementById("rate").textContent =
     `正答率：${rate}%（${correct}/${answered}）`;
 }
@@ -108,6 +107,6 @@ document.getElementById("darkBtn").onclick = () => {
   document.documentElement.classList.toggle("dark");
 };
 
-function shuffle(a) {
-  return a.sort(()=>Math.random()-0.5);
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
 }
