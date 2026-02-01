@@ -21,9 +21,9 @@ body {
   position: fixed;
   top: 12px;
   left: 12px;
-  font-size: 32px;
-  z-index: 1001;
+  font-size: 34px;
   cursor: pointer;
+  z-index: 1001;
 }
 
 /* 設定 */
@@ -31,23 +31,24 @@ body {
   position: fixed;
   top: 60px;
   left: 10px;
-  width: 60%;
-  max-width: 260px;
+  width: 75%;
+  max-width: 320px;
   background: white;
-  padding: 15px;
+  padding: 20px;
   display: none;
   z-index: 1000;
 }
 
 .settings-title {
-  font-size: 22px;
+  font-size: 24px;
   margin-bottom: 10px;
 }
 
 #settings button {
   width: 100%;
-  padding: 14px;
+  padding: 16px;
   margin-top: 10px;
+  font-size: 16px;
 }
 
 /* ホーム */
@@ -58,15 +59,15 @@ body {
 .subject-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 16px;
 }
 
 .subject-list button {
-  padding: 20px;
+  padding: 22px;
   font-size: 18px;
 }
 
-/* 問題 */
+/* クイズ */
 #rate {
   text-align: center;
   font-size: 18px;
@@ -76,8 +77,8 @@ body {
 #question {
   background: white;
   padding: 15px;
-  margin-bottom: 15px;
   font-size: 20px;
+  margin-bottom: 15px;
 }
 
 #choices {
@@ -88,16 +89,16 @@ body {
 
 .choice {
   padding: 18px;
-  background: white;
   font-size: 18px;
+  background: white;
 }
 
 .correct {
-  background: lightgreen !important;
+  background: #9eff9e !important;
 }
 
 .wrong {
-  background: #ffcccc !important;
+  background: #ffb3b3 !important;
 }
 
 #explanation {
@@ -145,4 +146,8 @@ body.dark #explanation {
 body.dark button {
   background: #666;
   color: #ccc;
+}
+
+body.dark #menuBtn {
+  color: #aaa;
 }
