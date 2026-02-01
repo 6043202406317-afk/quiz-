@@ -22,8 +22,12 @@ button {
   background: white;
 }
 
-button:active {
-  background: #cce5ff;
+.correct {
+  background: #b6f2b6;
+}
+
+.wrong {
+  background: #f5b6b6;
 }
 
 #choices {
