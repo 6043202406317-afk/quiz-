@@ -1,119 +1,106 @@
-var questions = {
-  it: [
-    {
-      q: "CPUの役割は？",
-      c: ["計算処理", "保存", "通信"],
-      a: 0,
-      e: "CPUは計算や制御を行う装置です。"
-    }
-  ],
-  physics: [
-    {
-      q: "力の単位は？",
-      c: ["N", "J", "W"],
-      a: 0,
-      e: "力の単位はニュートンです。"
-    }
-  ],
-  english: [
-    {
-      q: "appleの意味は？",
-      c: ["りんご", "みかん", "ぶどう"],
-      a: 0,
-      e: "appleはりんごです。"
-    }
-  ]
-};
-
-var currentList = [];
-var index = 0;
-var answered = false;
-var correctCount = 0;
-var solvedCount = 0;
-
-function shuffle(arr) {
-  for (var i = arr.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var t = arr[i];
-    arr[i] = arr[j];
-    arr[j] = t;
+const questions = [
+  {
+    q: "2進数1010を10進数にすると？",
+    choices: ["8", "9", "10", "12"],
+    answer: 2,
+    exp: "1010(2) = 8 + 2 = 10"
+  },
+  {
+    q: "CPUの役割はどれ？",
+    choices: ["記憶", "制御と演算", "表示", "通信"],
+    answer: 1,
+    exp: "CPUは制御と演算を行う装置です。"
   }
-}
+];
 
-function startQuiz(subject) {
-  document.getElementById("home").style.display = "none";
-  document.getElementById("quiz").style.display = "block";
+let order = [];
+let current = 0;
+let solved = {};
+let correctCount = 0;
+let answeredCount = 0;
 
-  correctCount = 0;
-  solvedCount = 0;
-  index = 0;
-
-  currentList = questions[subject].slice();
-  shuffle(currentList);
+function startQuiz() {
+  document.getElementById("home").classList.remove("active");
+  document.getElementById("quiz").classList.add("active");
+  shuffleOrder();
   showQuestion();
 }
 
+function shuffleOrder() {
+  order = [...Array(questions.length).keys()];
+  order.sort(() => Math.random() - 0.5);
+}
+
 function showQuestion() {
-  answered = false;
+  const q = questions[order[current]];
+  document.getElementById("question").textContent = q.q;
+
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = "";
+
   document.getElementById("explanation").style.display = "none";
 
-  var q = currentList[index];
-  document.getElementById("question").innerHTML = q.q;
+  const shuffled = q.choices.map((c, i) => ({ c, i }))
+    .sort(() => Math.random() - 0.5);
 
-  var choices = q.c.slice();
-  shuffle(choices);
+  shuffled.forEach(item => {
+    const btn = document.createElement("button");
+    btn.className = "choice";
+    btn.textContent = item.c;
+    btn.onclick = () => selectAnswer(btn, item.i);
+    choicesDiv.appendChild(btn);
+  });
 
-  var html = "";
-  for (var i = 0; i < choices.length; i++) {
-    html += '<button class="choice" onclick="selectChoice(' + i + ')">' + choices[i] + '</button>';
-  }
-  document.getElementById("choices").innerHTML = html;
-
-  updateStatus();
+  updateRate();
 }
 
-function selectChoice(i) {
-  if (answered) return;
-  answered = true;
+function selectAnswer(btn, index) {
+  const qIndex = order[current];
+  const q = questions[qIndex];
 
-  var q = currentList[index];
-  var buttons = document.getElementsByClassName("choice");
-
-  solvedCount++;
-
-  if (q.c[i] === q.c[q.a]) {
-    buttons[i].className += " correct";
-    correctCount++;
-  } else {
-    buttons[i].className += " wrong";
+  if (!(qIndex in solved)) {
+    solved[qIndex] = true;
+    answeredCount++;
+    if (index === q.answer) {
+      correctCount++;
+    }
   }
 
-  var ex = document.getElementById("explanation");
-  ex.innerHTML = q.e;
-  ex.style.display = "block";
+  document.querySelectorAll(".choice").forEach((b, i) => {
+    if (i === q.answer) b.classList.add("correct");
+    else if (b === btn) b.classList.add("wrong");
+  });
 
-  updateStatus();
+  const exp = document.getElementById("explanation");
+  exp.textContent = q.exp;
+  exp.style.display = "block";
+
+  updateRate();
 }
 
-function updateStatus() {
-  var rate = solvedCount === 0 ? 0 : Math.round((correctCount / solvedCount) * 100);
-  document.getElementById("status").innerHTML =
-    "正答率 " + rate + "％（" + correctCount + " / " + solvedCount + "）";
+function updateRate() {
+  const rate = answeredCount === 0 ? 0 :
+    Math.round((correctCount / answeredCount) * 100);
+  document.getElementById("rate").textContent =
+    `正答率 ${rate}%（${correctCount} / ${answeredCount}）`;
 }
 
 function nextQuestion() {
-  index++;
-  if (index >= currentList.length) index = 0;
+  current++;
+  if (current >= order.length) {
+    shuffleOrder();
+    current = 0;
+  }
   showQuestion();
 }
 
 function prevQuestion() {
-  index--;
-  if (index < 0) index = currentList.length - 1;
+  current--;
+  if (current < 0) current = order.length - 1;
   showQuestion();
 }
 
 function goHome() {
-  document.getElementById("quiz").style.display = "none";
-  document.getElementById("home").style.display = "block";
+  document.getElementById("quiz").classList.remove("active");
+  document.getElementById("home").classList.add("active");
 }
