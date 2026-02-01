@@ -14,13 +14,16 @@ const data = {
   ]
 };
 
+// ===== 状態 =====
 let questions = [];
 let order = [];
 let index = 0;
 
 let correct = 0;
 let answered = 0;
-let answeredMap = [];
+
+let selectedMap = [];   // 選択した答え
+let judgedMap = [];    // その問題を「次へ」で確定したか
 
 // ===== 教科選択 =====
 document.querySelectorAll(".subjects button").forEach(btn => {
@@ -31,15 +34,18 @@ function startQuiz(subject) {
   questions = data[subject];
   order = shuffle([...Array(questions.length).keys()]);
   index = 0;
+
   correct = 0;
   answered = 0;
-  answeredMap = Array(questions.length).fill(null);
+
+  selectedMap = Array(questions.length).fill(null);
+  judgedMap = Array(questions.length).fill(false);
 
   showScreen("quiz");
   showQuestion();
 }
 
-// ===== 表示切替 =====
+// ===== 画面切替 =====
 function showScreen(name) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(name).classList.add("active");
@@ -47,11 +53,13 @@ function showScreen(name) {
 
 // ===== 問題表示 =====
 function showQuestion() {
-  document.getElementById("explanation").classList.add("hidden");
-  document.getElementById("choices").innerHTML = "";
-
   const q = questions[order[index]];
   document.getElementById("question").textContent = q.q;
+
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = "";
+
+  document.getElementById("explanation").classList.add("hidden");
 
   let choices = q.c.map((t, i) => ({ t, i }));
   shuffle(choices);
@@ -59,16 +67,21 @@ function showQuestion() {
   choices.forEach(choice => {
     const btn = document.createElement("button");
     btn.textContent = choice.t;
-    btn.onclick = () => answer(choice.i, btn);
-    document.getElementById("choices").appendChild(btn);
+
+    // 以前の選択は色を消す
+    btn.onclick = () => selectAnswer(choice.i, btn);
+
+    choicesDiv.appendChild(btn);
   });
 
   updateStatus();
 }
 
-// ===== 回答 =====
-function answer(selected, btn) {
+// ===== 選択 =====
+function selectAnswer(selected, btn) {
   const q = questions[order[index]];
+
+  selectedMap[index] = selected;
 
   document.querySelectorAll("#choices button").forEach(b => {
     b.classList.remove("correct", "wrong");
@@ -77,39 +90,44 @@ function answer(selected, btn) {
   if (selected === q.a) btn.classList.add("correct");
   else btn.classList.add("wrong");
 
-  if (answeredMap[index] === null) {
-    answeredMap[index] = selected;
-    answered++;
-    if (selected === q.a) correct++;
-  }
-
   document.getElementById("explanation").textContent = "解説：" + q.e;
   document.getElementById("explanation").classList.remove("hidden");
-
-  updateStatus();
 }
 
-// ===== ステータス =====
-function updateStatus() {
-  const rate = answered === 0 ? 0 : Math.round((correct / answered) * 100);
-  document.getElementById("status").textContent =
-    `正答率：${rate}%（${correct} / ${answered}）`;
-}
-
-// ===== ナビ =====
+// ===== 次の問題 =====
 document.getElementById("next").onclick = () => {
+  // ★ ここで問題数を確定させる
+  if (!judgedMap[index]) {
+    judgedMap[index] = true;
+    answered++;
+
+    const q = questions[order[index]];
+    if (selectedMap[index] === q.a) {
+      correct++;
+    }
+  }
+
   index = (index + 1) % order.length;
   showQuestion();
 };
 
+// ===== 前の問題 =====
 document.getElementById("prev").onclick = () => {
   index = (index - 1 + order.length) % order.length;
   showQuestion();
 };
 
+// ===== ホーム =====
 document.getElementById("homeBtn").onclick = () => {
   showScreen("home");
 };
+
+// ===== 正答率表示 =====
+function updateStatus() {
+  const rate = answered === 0 ? 0 : Math.round((correct / answered) * 100);
+  document.getElementById("status").textContent =
+    `正答率：${rate}%（${correct} / ${answered}）`;
+}
 
 // ===== シャッフル =====
 function shuffle(arr) {
