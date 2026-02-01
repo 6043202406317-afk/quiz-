@@ -1,136 +1,79 @@
-* { box-sizing: border-box; }
-
 body {
-  margin: 0;
   font-family: sans-serif;
-  background: #f2f2f2;
-}
-
-/* 共通 */
-.screen {
+  margin: 0;
   padding: 20px;
-}
-.hidden { display: none; }
-
-/* ☰ */
-#menuBtn {
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  font-size: 34px;
-  z-index: 1000;
+  background: #f5f5f5;
 }
 
-/* 設定 */
-#settings {
-  position: fixed;
-  top: 60px;
-  left: 10px;
-  width: 70%;
-  max-width: 320px;
-  background: white;
-  padding: 20px;
-  z-index: 999;
+.hidden {
+  display: none;
 }
 
-.settings-title {
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-
-#settings button {
-  width: 100%;
-  padding: 18px;
-  font-size: 18px;
-  margin-top: 10px;
-}
-
-/* ホーム */
 #home {
   text-align: center;
 }
 
-.home-buttons {
+#home h1 {
+  font-size: 36px;
+  margin-bottom: 30px;
+}
+
+.subjects button {
+  display: block;
+  width: 90%;
   max-width: 400px;
-  margin: 0 auto;   /* ★中央寄せの決定打 */
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.home-buttons button {
-  padding: 22px;
-  font-size: 18px;
-}
-
-/* クイズ */
-#rate {
-  text-align: center;
-  font-size: 18px;
-  margin-bottom: 15px;
-}
-
-#question {
-  background: white;
-  padding: 15px;
+  margin: 15px auto;
+  padding: 20px;
   font-size: 20px;
 }
 
-#choices {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 15px;
-}
-
-.choice {
-  padding: 18px;
-  font-size: 18px;
+#quiz {
+  max-width: 600px;
+  margin: 0 auto;
   background: white;
+  padding: 20px;
+  border-radius: 8px;
 }
 
-.correct { background: #b6f2c2 !important; }
-.wrong { background: #f2b6b6 !important; }
+#rate {
+  text-align: center;
+  font-size: 18px;
+}
+
+#question {
+  margin: 20px 0;
+}
+
+#choices button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 15px;
+  font-size: 18px;
+}
+
+.correct {
+  background: #b6f5c3;
+}
+
+.wrong {
+  background: #f7b2b2;
+}
 
 #explanation {
+  background: #e8f2ff;
+  padding: 10px;
   margin-top: 15px;
-  padding: 15px;
-  background: #e6f2ff;
 }
 
-/* ナビ */
 .nav {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
 
-button {
-  padding: 18px;
-  font-size: 18px;
-  background: #ddd;
-}
-
-.homeBtn {
-  width: 100%;
-  margin-top: 15px;
-}
-
-/* ダーク */
-body.dark {
-  background: #000;
-  color: #ccc;
-}
-body.dark button,
-body.dark .choice,
-body.dark #settings {
-  background: #666;
-  color: #ccc;
-}
-body.dark #menuBtn {
-  color: #aaa;
-}
-body.dark #explanation {
-  background: #444;
-  color: #000;
+.nav button {
+  padding: 12px;
+  font-size: 16px;
+  width: 32%;
 }
