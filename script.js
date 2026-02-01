@@ -1,92 +1,82 @@
-const questions = {
-  info: [
-    {
-      q: "2進数で101は10進数でいくつ？",
-      choices: ["3", "4", "5", "6"],
-      answer: "5"
-    },
-    {
-      q: "CPUの役割はどれ？",
-      choices: ["記憶", "演算", "表示", "通信"],
-      answer: "演算"
-    }
-    // ← ここに前までの問題をどんどん追加
+const quizzes = {
+  it: [
+    { q: "CPUの役割はどれ？", a: "演算と制御", c: ["表示", "演算と制御", "記憶", "通信"] }
+  ],
+  physics: [
+    { q: "力の単位は？", a: "ニュートン", c: ["ジュール", "ワット", "ニュートン", "パスカル"] }
+  ],
+  english: [
+    { q: "apple の意味は？", a: "りんご", c: ["犬", "りんご", "机", "走る"] }
   ]
 };
 
-let order = [];
+let list = [];
 let index = 0;
-let answered = {}; // 回答済み記録
+let answered = new Set();
 let correct = 0;
 
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
+
 function startQuiz(subject) {
-  order = [...questions[subject]];
-  shuffle(order);
+  list = shuffle([...quizzes[subject]]);
   index = 0;
-  answered = {};
+  answered.clear();
   correct = 0;
-
-  document.getElementById("home").classList.add("hidden");
-  document.getElementById("quiz").classList.remove("hidden");
-
+  switchScreen('quiz');
   showQuestion();
-  updateStatus();
 }
 
 function showQuestion() {
-  const q = order[index];
+  const q = list[index];
   document.getElementById("question").textContent = q.q;
 
-  const choices = shuffle([...q.choices]);
-  const area = document.getElementById("choices");
-  area.innerHTML = "";
+  const choices = shuffle([...q.c]);
+  const box = document.getElementById("choices");
+  box.innerHTML = "";
 
-  choices.forEach(c => {
+  choices.forEach(choice => {
     const btn = document.createElement("button");
-    btn.textContent = c;
-    btn.className = "choice";
-    btn.onclick = () => selectAnswer(c);
-    area.appendChild(btn);
+    btn.textContent = choice;
+    btn.onclick = () => select(choice, q.a, btn);
+    box.appendChild(btn);
   });
+
+  updateStatus();
 }
 
-function selectAnswer(choice) {
-  if (answered[index]) return; // 選び直し無効
+function select(choice, answer, btn) {
+  if (answered.has(index)) return;
 
-  answered[index] = true;
-  if (choice === order[index].answer) {
-    correct++;
-  }
+  answered.add(index);
+  if (choice === answer) correct++;
+
+  btn.style.background = choice === answer ? "#aaffaa" : "#ffaaaa";
   updateStatus();
 }
 
 function updateStatus() {
-  const answeredCount = Object.keys(answered).length;
-  const rate = answeredCount === 0 ? 0 : Math.round(correct / answeredCount * 100);
-  document.getElementById("rate").textContent = rate + "%";
-  document.getElementById("count").textContent =
-    `(${answeredCount} / ${order.length})`;
+  const rate = answered.size === 0 ? 0 : Math.round((correct / answered.size) * 100);
+  document.getElementById("status").textContent =
+    `正答率 ${rate}%（${correct} / ${answered.size}）`;
 }
 
 function nextQuestion() {
-  index = (index + 1) % order.length;
+  index = (index + 1) % list.length;
   showQuestion();
 }
 
 function prevQuestion() {
-  index = (index - 1 + order.length) % order.length;
+  index = (index - 1 + list.length) % list.length;
   showQuestion();
 }
 
 function goHome() {
-  document.getElementById("quiz").classList.add("hidden");
-  document.getElementById("home").classList.remove("hidden");
+  switchScreen('home');
 }
 
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
+function switchScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
