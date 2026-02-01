@@ -1,117 +1,103 @@
-const data = {
+const quizzes = {
   it: [
     {
       q: "CPUの役割はどれ？",
-      c: ["記憶", "演算", "表示", "印刷"],
-      a: 1,
-      e: "CPUは演算や制御を行う装置です。"
-    },
-    {
-      q: "2進数の10は10進数でいくつ？",
-      c: ["1", "2", "3", "4"],
-      a: 1,
-      e: "2進数の10は10進数で2です。"
-    },
-    {
-      q: "RAMの特徴は？",
-      c: ["電源を切っても残る", "一時的に使う", "補助記憶", "読み取り専用"],
-      a: 1,
-      e: "RAMは一時的に使われます。"
+      c: ["演算と制御", "記憶", "表示", "通信"],
+      a: 0,
+      e: "CPUは演算と制御を行います。"
     }
   ],
   physics: [
     {
       q: "力の単位は？",
-      c: ["J", "W", "N", "kg"],
-      a: 2,
-      e: "力の単位はNです。"
+      c: ["N", "J", "W", "Pa"],
+      a: 0,
+      e: "力の単位はニュートン（N）です。"
     }
   ],
   english: [
     {
       q: "apple の意味は？",
-      c: ["犬", "りんご", "本", "車"],
-      a: 1,
-      e: "apple は りんご。"
+      c: ["りんご", "みかん", "ぶどう", "ばなな"],
+      a: 0,
+      e: "apple は りんご です。"
     }
   ]
 };
 
-let questions = [];
+let currentQuiz = [];
 let index = 0;
+let answered = new Set();
 let correct = 0;
-let answered = 0;
 
 function shuffle(arr) {
   return arr.sort(() => Math.random() - 0.5);
 }
 
 function startQuiz(type) {
-  questions = shuffle([...data[type]]);
-  questions.forEach(q => q.c = shuffle(q.c));
+  currentQuiz = shuffle([...quizzes[type]]);
   index = 0;
+  answered.clear();
   correct = 0;
-  answered = 0;
-
-  document.getElementById("home").classList.add("hidden");
-  document.getElementById("quiz").classList.remove("hidden");
-
+  showScreen("quiz");
   showQuestion();
 }
 
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
 function showQuestion() {
-  const q = questions[index];
+  const q = currentQuiz[index];
   document.getElementById("question").textContent = q.q;
   document.getElementById("explanation").textContent = "";
 
-  const choices = document.getElementById("choices");
-  choices.innerHTML = "";
+  const choices = shuffle(q.c.map((text, i) => ({ text, i })));
+  const area = document.getElementById("choices");
+  area.innerHTML = "";
 
-  q.c.forEach((text, i) => {
+  choices.forEach(choice => {
     const btn = document.createElement("button");
-    btn.textContent = text;
-    btn.onclick = () => checkAnswer(i, btn);
-    choices.appendChild(btn);
+    btn.textContent = choice.text;
+    btn.onclick = () => select(choice.i, btn);
+    area.appendChild(btn);
   });
 
-  updateRate();
+  updateStatus();
 }
 
-function checkAnswer(i, btn) {
-  const q = questions[index];
-  answered++;
-
-  if (i === q.a) {
-    correct++;
-    btn.classList.add("correct");
-  } else {
-    btn.classList.add("wrong");
+function select(i, btn) {
+  if (!answered.has(index)) {
+    answered.add(index);
+    if (i === currentQuiz[index].a) correct++;
   }
 
-  document.getElementById("explanation").textContent = q.e;
-  updateRate();
+  document.querySelectorAll(".choices button").forEach(b => {
+    b.classList.remove("correct", "wrong");
+  });
+
+  btn.classList.add(i === currentQuiz[index].a ? "correct" : "wrong");
+  document.getElementById("explanation").textContent = currentQuiz[index].e;
+  updateStatus();
 }
 
-function updateRate() {
-  const rate = answered === 0 ? 0 : Math.round((correct / answered) * 100);
-  document.getElementById("rate").textContent = `正答率：${rate}%`;
+function updateStatus() {
+  const rate = answered.size === 0 ? 0 : Math.round((correct / answered.size) * 100);
+  document.getElementById("status").textContent =
+    `正答率 ${rate}%（${answered.size} / ${currentQuiz.length}）`;
 }
 
 function nextQuestion() {
-  if (index < questions.length - 1) {
-    index++;
-    showQuestion();
-  }
+  index = (index + 1) % currentQuiz.length;
+  showQuestion();
 }
 
 function prevQuestion() {
-  if (index > 0) {
-    index--;
-    showQuestion();
-  }
+  index = (index - 1 + currentQuiz.length) % currentQuiz.length;
+  showQuestion();
 }
 
 function goHome() {
-  document.getElementById("quiz").classList.add("hidden");
-  document.getElementById("home").classList.remove("hidden");
+  showScreen("home");
 }
