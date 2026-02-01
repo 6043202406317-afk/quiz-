@@ -2,15 +2,27 @@ const data = {
   it: [
     {
       q: "CPUの役割はどれ？",
-      c: ["表示", "演算と制御", "記憶", "通信"],
+      c: ["記憶", "演算と制御", "表示", "通信"],
       a: 1,
       e: "CPUは演算と制御を行います。"
     },
     {
-      q: "RAMの特徴は？",
+      q: "2進数の10は10進数でいくつ？",
+      c: ["1", "2", "3", "4"],
+      a: 1,
+      e: "2進数の10は10進数で2です。"
+    },
+    {
+      q: "RAMの特徴はどれ？",
       c: ["電源を切っても残る", "一時的に使う", "補助記憶装置", "読み取り専用"],
       a: 1,
-      e: "RAMは一時的に使われます。"
+      e: "RAMは一時的に使われる記憶装置です。"
+    },
+    {
+      q: "OSの役割はどれ？",
+      c: ["計算を行う", "機器や資源を管理する", "印刷する", "通信だけする"],
+      a: 1,
+      e: "OSはコンピュータ全体を管理します。"
     }
   ],
   physics: [
@@ -18,7 +30,7 @@ const data = {
       q: "力の単位は？",
       c: ["J", "N", "W", "kg"],
       a: 1,
-      e: "力の単位はニュートン（N）です。"
+      e: "力の単位はニュートン(N)です。"
     }
   ],
   english: [
@@ -33,7 +45,7 @@ const data = {
 
 let questions = [];
 let index = 0;
-let answered = new Set();
+let answeredSet = new Set();
 let correct = 0;
 
 function shuffle(arr) {
@@ -43,8 +55,8 @@ function shuffle(arr) {
 function startQuiz(type) {
   questions = shuffle([...data[type]]);
   index = 0;
-  answered.clear();
   correct = 0;
+  answeredSet.clear();
   showScreen("quiz");
   showQuestion();
 }
@@ -59,22 +71,22 @@ function showQuestion() {
   document.getElementById("question").textContent = q.q;
   document.getElementById("explanation").textContent = "";
 
-  const area = document.getElementById("choices");
-  area.innerHTML = "";
+  const choices = document.getElementById("choices");
+  choices.innerHTML = "";
 
-  shuffle(q.c.map((text, i) => ({ text, i }))).forEach(choice => {
+  shuffle(q.c.map((t, i) => ({ t, i }))).forEach(choice => {
     const btn = document.createElement("button");
-    btn.textContent = choice.text;
+    btn.textContent = choice.t;
     btn.onclick = () => selectAnswer(choice.i, btn);
-    area.appendChild(btn);
+    choices.appendChild(btn);
   });
 
   updateStatus();
 }
 
 function selectAnswer(i, btn) {
-  if (!answered.has(index)) {
-    answered.add(index);
+  if (!answeredSet.has(index)) {
+    answeredSet.add(index);
     if (i === questions[index].a) correct++;
   }
 
@@ -88,13 +100,21 @@ function selectAnswer(i, btn) {
 }
 
 function updateStatus() {
-  const rate = answered.size === 0 ? 0 : Math.round((correct / answered.size) * 100);
+  const rate =
+    answeredSet.size === 0 ? 0 : Math.round((correct / answeredSet.size) * 100);
   document.getElementById("status").textContent =
-    `正答率 ${rate}%（${answered.size} / ${questions.length}）`;
+    `正答率 ${rate}%（${answeredSet.size} / ${questions.length}）`;
 }
 
 function nextQuestion() {
-  index = (index + 1) % questions.length;
+  index++;
+  if (index >= questions.length) {
+    // 1周したらリセット
+    index = 0;
+    correct = 0;
+    answeredSet.clear();
+    questions = shuffle(questions);
+  }
   showQuestion();
 }
 
