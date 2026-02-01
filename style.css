@@ -1,6 +1,5 @@
 * {
   box-sizing: border-box;
-  font-size: 18px;
 }
 
 body {
@@ -20,10 +19,11 @@ body {
 /* ☰ */
 #menuBtn {
   position: fixed;
-  top: 10px;
-  left: 10px;
+  top: 12px;
+  left: 12px;
   font-size: 32px;
   z-index: 1001;
+  cursor: pointer;
 }
 
 /* 設定 */
@@ -31,7 +31,7 @@ body {
   position: fixed;
   top: 60px;
   left: 10px;
-  width: 65%;
+  width: 60%;
   max-width: 260px;
   background: white;
   padding: 15px;
@@ -39,13 +39,14 @@ body {
   z-index: 1000;
 }
 
-#settings h2 {
-  margin-top: 0;
+.settings-title {
+  font-size: 22px;
+  margin-bottom: 10px;
 }
 
 #settings button {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   margin-top: 10px;
 }
 
@@ -61,15 +62,22 @@ body {
 }
 
 .subject-list button {
-  padding: 18px;
+  padding: 20px;
+  font-size: 18px;
 }
 
 /* 問題 */
+#rate {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
 #question {
-  font-size: 20px;
-  margin-bottom: 20px;
   background: white;
   padding: 15px;
+  margin-bottom: 15px;
+  font-size: 20px;
 }
 
 #choices {
@@ -81,10 +89,15 @@ body {
 .choice {
   padding: 18px;
   background: white;
+  font-size: 18px;
 }
 
 .correct {
   background: lightgreen !important;
+}
+
+.wrong {
+  background: #ffcccc !important;
 }
 
 #explanation {
@@ -100,10 +113,15 @@ body {
   margin-top: 20px;
 }
 
+.nav button,
 .homeBtn {
-  margin-top: 15px;
-  width: 100%;
   padding: 18px;
+  font-size: 18px;
+}
+
+.homeBtn {
+  width: 100%;
+  margin-top: 15px;
 }
 
 /* ダークモード */
