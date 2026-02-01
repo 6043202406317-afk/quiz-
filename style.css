@@ -4,17 +4,26 @@ body {
   background: #f5f5f5;
 }
 
+/* 画面 */
+.screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ☰ */
 #menuBtn {
   position: fixed;
-  top: 12px;
-  left: 12px;
+  top: 10px;
+  left: 10px;
   font-size: 32px;
-  z-index: 1001;
   cursor: pointer;
+  z-index: 1001;
 }
 
-/* サイドメニュー */
+/* メニュー */
 #sideMenu {
   position: fixed;
   top: 0;
@@ -22,13 +31,19 @@ body {
   width: 200px;
   height: 45%;
   background: #fff;
-  padding: 16px;
+  padding: 12px;
   z-index: 1000;
 }
 
-.menuHeader {
-  font-size: 20px;
-  margin-bottom: 16px; /* ← ☰と重ならない */
+#sideMenu h2 {
+  margin: 0 0 10px;
+}
+
+#sideMenu button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  margin-bottom: 8px;
 }
 
 /* 背景 */
@@ -37,15 +52,6 @@ body {
   inset: 0;
   background: rgba(0,0,0,0.3);
   z-index: 999;
-}
-
-/* 画面 */
-.screen {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 /* ホーム */
@@ -57,8 +63,8 @@ body {
 #home button {
   width: 240px;
   padding: 14px;
-  font-size: 18px;
   margin: 8px;
+  font-size: 18px;
 }
 
 /* 問題 */
@@ -104,20 +110,20 @@ body {
   margin-top: 10px;
 }
 
+.nav button,
 .homeBtn {
-  margin-top: 24px; /* ← 前・次と少し離す */
   padding: 12px;
   font-size: 16px;
 }
 
-/* ダーク */
+/* ダークモード */
 .dark body {
   background: #000;
   color: #fff;
 }
 
 .dark #menuBtn,
-.dark .menuHeader {
+.dark #sideMenu h2 {
   color: #aaa;
 }
 
