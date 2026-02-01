@@ -1,6 +1,4 @@
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -22,8 +20,8 @@ body {
   top: 12px;
   left: 12px;
   font-size: 34px;
+  z-index: 1000;
   cursor: pointer;
-  z-index: 1001;
 }
 
 /* 設定 */
@@ -31,24 +29,23 @@ body {
   position: fixed;
   top: 60px;
   left: 10px;
-  width: 75%;
+  width: 70%;
   max-width: 320px;
   background: white;
   padding: 20px;
-  display: none;
-  z-index: 1000;
+  z-index: 999;
 }
 
 .settings-title {
-  font-size: 24px;
+  font-size: 22px;
   margin-bottom: 10px;
 }
 
 #settings button {
   width: 100%;
-  padding: 16px;
+  padding: 18px;
   margin-top: 10px;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 /* ホーム */
@@ -56,15 +53,11 @@ body {
   text-align: center;
 }
 
-.subject-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.subject-list button {
+#home button {
+  width: 100%;
   padding: 22px;
   font-size: 18px;
+  margin-top: 15px;
 }
 
 /* クイズ */
@@ -78,13 +71,13 @@ body {
   background: white;
   padding: 15px;
   font-size: 20px;
-  margin-bottom: 15px;
 }
 
 #choices {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-top: 15px;
 }
 
 .choice {
@@ -94,17 +87,17 @@ body {
 }
 
 .correct {
-  background: #9eff9e !important;
+  background: #b6f2c2 !important;
 }
 
 .wrong {
-  background: #ffb3b3 !important;
+  background: #f2b6b6 !important;
 }
 
 #explanation {
   margin-top: 15px;
   padding: 15px;
-  background: #dff0ff;
+  background: #e6f2ff;
 }
 
 /* ナビ */
@@ -115,14 +108,11 @@ body {
 }
 
 .nav button,
-.homeBtn {
+.homeBtn,
+button {
   padding: 18px;
   font-size: 18px;
-}
-
-.homeBtn {
-  width: 100%;
-  margin-top: 15px;
+  background: #ddd;
 }
 
 /* ダークモード */
@@ -131,23 +121,18 @@ body.dark {
   color: #ccc;
 }
 
-body.dark #question,
+body.dark button,
 body.dark .choice,
 body.dark #settings {
-  background: #555;
-  color: #ccc;
-}
-
-body.dark #explanation {
-  background: #444;
-  color: #000;
-}
-
-body.dark button {
   background: #666;
   color: #ccc;
 }
 
 body.dark #menuBtn {
   color: #aaa;
+}
+
+body.dark #explanation {
+  background: #444;
+  color: #000;
 }
