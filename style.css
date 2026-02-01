@@ -1,49 +1,93 @@
-body {
+* {
+  box-sizing: border-box;
   font-family: sans-serif;
+}
+
+body {
   margin: 0;
-  padding: 10px;
+  background: #f5f5f5;
+}
+
+.screen {
+  display: none;
+  min-height: 100vh;
+  padding: 20px;
   text-align: center;
 }
 
-button {
-  width: 90%;
-  max-width: 400px;
-  padding: 15px;
-  margin: 8px auto;
-  font-size: 16px;
+.screen.active {
   display: block;
 }
 
-.subjects button {
+/* ホーム画面 */
+.subject-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.subject-list button {
   background: white;
-  border: 1px solid #333;
+  border: 2px solid #ccc;
+  padding: 15px;
+  font-size: 18px;
+  border-radius: 10px;
+}
+
+/* 問題画面 */
+.status {
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+#question {
+  font-size: 18px;
+  margin: 20px 0;
+}
+
+#choices {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .choice {
-  border: 1px solid #333;
+  padding: 15px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 2px solid #999;
+  background: white;
 }
 
-.correct {
-  background: #8fdf82;
+.choice.correct {
+  background: #a8e6a1;
 }
 
-.wrong {
-  background: #f28b82;
+.choice.wrong {
+  background: #f5a3a3;
 }
 
 #explanation {
-  background: #dff3ff;
-  margin-top: 10px;
-  padding: 10px;
   display: none;
+  margin-top: 20px;
+  padding: 15px;
+  background: #cceeff;
+  border-radius: 10px;
+  text-align: left;
 }
 
-.nav {
+.nav,
+.home-btn {
+  margin-top: 20px;
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 15px;
 }
 
-.home-btn {
-  margin-top: 10px;
+.nav button,
+.home-btn button {
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 10px;
 }
