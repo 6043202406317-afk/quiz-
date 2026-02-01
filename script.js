@@ -5,7 +5,7 @@ const data = {
     { q: "RAMの特徴は？", c: ["一時記憶", "永久保存", "外部記憶", "ROM"], a: 0, e: "RAMは一時記憶。" }
   ],
   physics: [
-    { q: "力の単位は？", c: ["kg", "N", "J", "W"], a: 1, e: "力はN。" }
+    { q: "力の単位は？", c: ["kg", "N", "J", "W"], a: 1, e: "力の単位はN。" }
   ],
   english: [
     { q: "appleの意味は？", c: ["犬", "りんご", "車", "本"], a: 1, e: "appleはりんご。" }
@@ -13,6 +13,7 @@ const data = {
 };
 
 let subject = "";
+let questions = [];
 let index = 0;
 let answered = {};
 let correct = 0;
@@ -24,25 +25,43 @@ const choices = document.getElementById("choices");
 const explanation = document.getElementById("explanation");
 const rate = document.getElementById("rate");
 
+/* シャッフル関数 */
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+/* 開始 */
 function startQuiz(type) {
   subject = type;
+  questions = [...data[type]];
+  shuffle(questions);          // ★問題ランダム
   index = 0;
   answered = {};
   correct = 0;
+
   home.classList.add("hidden");
   quiz.classList.remove("hidden");
+
   showQuestion();
 }
 
+/* 表示 */
 function showQuestion() {
-  const q = data[subject][index];
+  const q = questions[index];
   question.textContent = q.q;
   explanation.textContent = "";
   choices.innerHTML = "";
 
-  q.c.forEach((text, i) => {
+  // 選択肢を index 付きでシャッフル
+  const choiceList = q.c.map((text, i) => ({ text, i }));
+  shuffle(choiceList);         // ★選択肢ランダム
+
+  choiceList.forEach(item => {
     const btn = document.createElement("button");
-    btn.textContent = text;
+    btn.textContent = item.text;
     btn.className = "choice";
 
     btn.onclick = () => {
@@ -52,10 +71,10 @@ function showQuestion() {
 
       if (!(index in answered)) {
         answered[index] = true;
-        if (i === q.a) correct++;
+        if (item.i === q.a) correct++;
       }
 
-      btn.classList.add(i === q.a ? "correct" : "wrong");
+      btn.classList.add(item.i === q.a ? "correct" : "wrong");
       explanation.textContent = q.e;
       updateRate();
     };
@@ -64,22 +83,22 @@ function showQuestion() {
   });
 }
 
+/* 正答率 */
 function updateRate() {
   const total = Object.keys(answered).length;
   const percent = total ? Math.round((correct / total) * 100) : 0;
-  rate.textContent = `正答率：${percent}%（${correct} / ${total}）`;
+  rate.textContent = `正答率：${percent}%`;
 }
 
+/* 移動 */
 function nextQuestion() {
-  index = (index + 1) % data[subject].length;
+  index = (index + 1) % questions.length;
   showQuestion();
 }
-
 function prevQuestion() {
-  index = (index - 1 + data[subject].length) % data[subject].length;
+  index = (index - 1 + questions.length) % questions.length;
   showQuestion();
 }
-
 function goHome() {
   quiz.classList.add("hidden");
   home.classList.remove("hidden");
@@ -94,10 +113,6 @@ menuBtn.onclick = (e) => {
   e.stopPropagation();
   settings.classList.toggle("hidden");
 };
-
 document.onclick = () => settings.classList.add("hidden");
-settings.onclick = (e) => e.stopPropagation();
-
-darkBtn.onclick = () => {
-  document.body.classList.toggle("dark");
-};
+settings.onclick = e => e.stopPropagation();
+darkBtn.onclick = () => document.body.classList.toggle("dark");
