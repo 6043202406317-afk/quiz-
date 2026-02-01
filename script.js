@@ -1,106 +1,113 @@
-const questions = [
-  {
-    q: "2進数1010を10進数にすると？",
-    choices: ["8", "9", "10", "12"],
-    answer: 2,
-    exp: "1010(2) = 8 + 2 = 10"
-  },
-  {
-    q: "CPUの役割はどれ？",
-    choices: ["記憶", "制御と演算", "表示", "通信"],
-    answer: 1,
-    exp: "CPUは制御と演算を行う装置です。"
-  }
-];
+const data = {
+  it: [
+    { q: "CPUの役割は？", c: ["記憶", "演算", "表示", "印刷"], a: 1, e: "CPUは演算と制御を行います。" },
+    { q: "2進数の10は？", c: ["1", "2", "3", "4"], a: 1, e: "10進数で2です。" },
+    { q: "RAMの特徴は？", c: ["永続", "一時", "補助", "ROM"], a: 1, e: "RAMは一時記憶です。" }
+  ],
+  physics: [
+    { q: "力の単位は？", c: ["J", "W", "N", "kg"], a: 2, e: "ニュートンです。" }
+  ],
+  english: [
+    { q: "appleの意味は？", c: ["犬", "りんご", "本", "車"], a: 1, e: "りんごです。" }
+  ]
+};
 
-let order = [];
-let current = 0;
-let solved = {};
-let correctCount = 0;
-let answeredCount = 0;
+let questions = [];
+let index = 0;
+let correct = 0;
+let answered = 0;
+let counted = false; // ← 重要
 
-function startQuiz() {
-  document.getElementById("home").classList.remove("active");
-  document.getElementById("quiz").classList.add("active");
-  shuffleOrder();
+function startQuiz(type) {
+  questions = shuffle([...data[type]]);
+  index = 0;
+  correct = 0;
+  answered = 0;
+  updateRate();
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
   showQuestion();
 }
 
-function shuffleOrder() {
-  order = [...Array(questions.length).keys()];
-  order.sort(() => Math.random() - 0.5);
+function showQuestion() {
+  counted = false; // ← 問題ごとにリセット
+  const q = questions[index];
+  document.getElementById("question").textContent = q.q;
+  document.getElementById("explanation").textContent = "";
+
+  const choices = document.getElementById("choices");
+  choices.innerHTML = "";
+
+  shuffle(q.c.map((t,i)=>({t,i}))).forEach(o=>{
+    const b = document.createElement("button");
+    b.textContent = o.t;
+    b.onclick = () => answer(o.i, b);
+    choices.appendChild(b);
+  });
 }
 
-function showQuestion() {
-  const q = questions[order[current]];
-  document.getElementById("question").textContent = q.q;
+function answer(i, btn) {
+  const q = questions[index];
 
-  const choicesDiv = document.getElementById("choices");
-  choicesDiv.innerHTML = "";
-
-  document.getElementById("explanation").style.display = "none";
-
-  const shuffled = q.choices.map((c, i) => ({ c, i }))
-    .sort(() => Math.random() - 0.5);
-
-  shuffled.forEach(item => {
-    const btn = document.createElement("button");
-    btn.className = "choice";
-    btn.textContent = item.c;
-    btn.onclick = () => selectAnswer(btn, item.i);
-    choicesDiv.appendChild(btn);
+  // 色リセット
+  document.querySelectorAll("#choices button").forEach(b=>{
+    b.classList.remove("correct","wrong");
   });
 
-  updateRate();
-}
+  if (i === q.a) btn.classList.add("correct");
+  else btn.classList.add("wrong");
 
-function selectAnswer(btn, index) {
-  const qIndex = order[current];
-  const q = questions[qIndex];
-
-  if (!(qIndex in solved)) {
-    solved[qIndex] = true;
-    answeredCount++;
-    if (index === q.answer) {
-      correctCount++;
-    }
+  // ★ 正答率は最初の1回だけ
+  if (!counted) {
+    counted = true;
+    answered++;
+    if (i === q.a) correct++;
+    updateRate();
   }
 
-  document.querySelectorAll(".choice").forEach((b, i) => {
-    if (i === q.answer) b.classList.add("correct");
-    else if (b === btn) b.classList.add("wrong");
-  });
-
-  const exp = document.getElementById("explanation");
-  exp.textContent = q.exp;
-  exp.style.display = "block";
-
-  updateRate();
+  document.getElementById("explanation").textContent = "解説：" + q.e;
 }
 
 function updateRate() {
-  const rate = answeredCount === 0 ? 0 :
-    Math.round((correctCount / answeredCount) * 100);
+  const rate = answered ? Math.round((correct/answered)*100) : 0;
   document.getElementById("rate").textContent =
-    `正答率 ${rate}%（${correctCount} / ${answeredCount}）`;
+    `正答率：${rate}%（${correct}/${answered}）`;
 }
 
 function nextQuestion() {
-  current++;
-  if (current >= order.length) {
-    shuffleOrder();
-    current = 0;
-  }
+  index = (index + 1) % questions.length;
   showQuestion();
 }
 
 function prevQuestion() {
-  current--;
-  if (current < 0) current = order.length - 1;
+  index = (index - 1 + questions.length) % questions.length;
   showQuestion();
 }
 
 function goHome() {
-  document.getElementById("quiz").classList.remove("active");
-  document.getElementById("home").classList.add("active");
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("home").classList.remove("hidden");
+}
+
+/* メニュー */
+const menuBtn = document.getElementById("menuBtn");
+const sideMenu = document.getElementById("sideMenu");
+const overlay = document.getElementById("overlay");
+
+menuBtn.onclick = () => {
+  sideMenu.classList.toggle("hidden");
+  overlay.classList.toggle("hidden");
+};
+overlay.onclick = () => {
+  sideMenu.classList.add("hidden");
+  overlay.classList.add("hidden");
+};
+
+/* ダーク */
+document.getElementById("darkBtn").onclick = () => {
+  document.documentElement.classList.toggle("dark");
+};
+
+function shuffle(a) {
+  return a.sort(()=>Math.random()-0.5);
 }
