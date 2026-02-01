@@ -16,7 +16,6 @@ let questions = [];
 let index = 0;
 let correct = 0;
 let answered = 0;
-let counted = false; // ← 重要
 
 function startQuiz(type) {
   questions = shuffle([...data[type]]);
@@ -30,7 +29,6 @@ function startQuiz(type) {
 }
 
 function showQuestion() {
-  counted = false; // ← 問題ごとにリセット
   const q = questions[index];
   document.getElementById("question").textContent = q.q;
   document.getElementById("explanation").textContent = "";
@@ -49,22 +47,20 @@ function showQuestion() {
 function answer(i, btn) {
   const q = questions[index];
 
-  // 色リセット
+  // 色を一旦リセット
   document.querySelectorAll("#choices button").forEach(b=>{
     b.classList.remove("correct","wrong");
   });
 
-  if (i === q.a) btn.classList.add("correct");
-  else btn.classList.add("wrong");
-
-  // ★ 正答率は最初の1回だけ
-  if (!counted) {
-    counted = true;
-    answered++;
-    if (i === q.a) correct++;
-    updateRate();
+  if (i === q.a) {
+    btn.classList.add("correct");
+    correct++;
+  } else {
+    btn.classList.add("wrong");
   }
 
+  answered++;
+  updateRate();
   document.getElementById("explanation").textContent = "解説：" + q.e;
 }
 
