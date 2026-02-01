@@ -6,13 +6,11 @@ body {
   background: #f2f2f2;
 }
 
+/* 共通 */
 .screen {
   padding: 20px;
 }
-
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 
 /* ☰ */
 #menuBtn {
@@ -21,7 +19,6 @@ body {
   left: 12px;
   font-size: 34px;
   z-index: 1000;
-  cursor: pointer;
 }
 
 /* 設定 */
@@ -44,8 +41,8 @@ body {
 #settings button {
   width: 100%;
   padding: 18px;
-  margin-top: 10px;
   font-size: 18px;
+  margin-top: 10px;
 }
 
 /* ホーム */
@@ -53,11 +50,17 @@ body {
   text-align: center;
 }
 
-#home button {
-  width: 100%;
+.home-buttons {
+  max-width: 400px;
+  margin: 0 auto;   /* ★中央寄せの決定打 */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.home-buttons button {
   padding: 22px;
   font-size: 18px;
-  margin-top: 15px;
 }
 
 /* クイズ */
@@ -86,13 +89,8 @@ body {
   background: white;
 }
 
-.correct {
-  background: #b6f2c2 !important;
-}
-
-.wrong {
-  background: #f2b6b6 !important;
-}
+.correct { background: #b6f2c2 !important; }
+.wrong { background: #f2b6b6 !important; }
 
 #explanation {
   margin-top: 15px;
@@ -107,31 +105,31 @@ body {
   margin-top: 20px;
 }
 
-.nav button,
-.homeBtn,
 button {
   padding: 18px;
   font-size: 18px;
   background: #ddd;
 }
 
-/* ダークモード */
+.homeBtn {
+  width: 100%;
+  margin-top: 15px;
+}
+
+/* ダーク */
 body.dark {
   background: #000;
   color: #ccc;
 }
-
 body.dark button,
 body.dark .choice,
 body.dark #settings {
   background: #666;
   color: #ccc;
 }
-
 body.dark #menuBtn {
   color: #aaa;
 }
-
 body.dark #explanation {
   background: #444;
   color: #000;
