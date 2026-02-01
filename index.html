@@ -8,13 +8,10 @@
 </head>
 <body>
 
-<!-- 正答率 -->
-<p id="rate">正答率：--%（0/0）</p>
-
 <!-- ホーム画面 -->
-<div id="home">
-  <h1>過去問道場</h1>
-  <div class="subjects">
+<div id="home" class="screen active">
+  <h1 class="title">過去問道場</h1>
+  <div class="subject-list">
     <button onclick="startQuiz('it')">情報技術（テスト）</button>
     <button onclick="startQuiz('physics')">物理</button>
     <button onclick="startQuiz('english')">英語</button>
@@ -22,17 +19,19 @@
 </div>
 
 <!-- 問題画面 -->
-<div id="quiz" class="hidden">
-  <h2 id="question"></h2>
-  <div id="choices"></div>
+<div id="quiz" class="screen">
+  <div id="status" class="status"></div>
 
-  <p id="result"></p>
-  <p id="explanation"></p>
+  <div id="question" class="question"></div>
+
+  <div id="choices" class="choices"></div>
+
+  <div id="explanation" class="explanation"></div>
 
   <div class="nav">
     <button onclick="prevQuestion()">前の問題</button>
-    <button onclick="goHome()">ホーム画面</button>
     <button onclick="nextQuestion()">次の問題</button>
+    <button onclick="goHome()">ホーム画面</button>
   </div>
 </div>
 
