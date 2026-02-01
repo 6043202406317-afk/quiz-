@@ -1,93 +1,146 @@
-* {
-  box-sizing: border-box;
-  font-family: sans-serif;
-}
-
 body {
   margin: 0;
+  font-family: sans-serif;
   background: #f5f5f5;
 }
 
+/* ☰ */
+#menuBtn {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  font-size: 32px;
+  z-index: 1001;
+  cursor: pointer;
+}
+
+/* サイドメニュー */
+#sideMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 45%;
+  background: #fff;
+  padding: 16px;
+  z-index: 1000;
+}
+
+.menuHeader {
+  font-size: 20px;
+  margin-bottom: 16px; /* ← ☰と重ならない */
+}
+
+/* 背景 */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 999;
+}
+
+/* 画面 */
 .screen {
-  display: none;
-  min-height: 100vh;
-  padding: 20px;
-  text-align: center;
-}
-
-.screen.active {
-  display: block;
-}
-
-/* ホーム画面 */
-.subject-list {
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-top: 30px;
+  align-items: center;
+  justify-content: center;
 }
 
-.subject-list button {
-  background: white;
-  border: 2px solid #ccc;
-  padding: 15px;
+/* ホーム */
+#home h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+#home button {
+  width: 240px;
+  padding: 14px;
   font-size: 18px;
-  border-radius: 10px;
+  margin: 8px;
 }
 
-/* 問題画面 */
-.status {
-  margin-bottom: 15px;
-  font-size: 16px;
+/* 問題 */
+#rate {
+  margin-bottom: 10px;
 }
 
 #question {
-  font-size: 18px;
-  margin: 20px 0;
+  font-size: 20px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 #choices {
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
 
-.choice {
-  padding: 15px;
+#choices button {
+  width: 260px;
+  padding: 14px;
+  margin: 6px 0;
   font-size: 16px;
-  border-radius: 10px;
-  border: 2px solid #999;
-  background: white;
+  background: #fff;
 }
 
-.choice.correct {
-  background: #a8e6a1;
-}
+.correct { background: #b6f2c2 !important; }
+.wrong { background: #f2b6b6 !important; }
 
-.choice.wrong {
-  background: #f5a3a3;
-}
-
+/* 解説 */
 #explanation {
-  display: none;
-  margin-top: 20px;
-  padding: 15px;
-  background: #cceeff;
-  border-radius: 10px;
-  text-align: left;
+  margin-top: 10px;
+  padding: 10px;
+  width: 260px;
+  background: #e0f0ff;
+  color: #000;
 }
 
-.nav,
-.home-btn {
-  margin-top: 20px;
+/* ナビ */
+.nav {
   display: flex;
-  justify-content: center;
-  gap: 15px;
+  gap: 20px;
+  margin-top: 10px;
 }
 
-.nav button,
-.home-btn button {
-  padding: 12px 20px;
+.homeBtn {
+  margin-top: 24px; /* ← 前・次と少し離す */
+  padding: 12px;
   font-size: 16px;
-  border-radius: 10px;
+}
+
+/* ダーク */
+.dark body {
+  background: #000;
+  color: #fff;
+}
+
+.dark #menuBtn,
+.dark .menuHeader {
+  color: #aaa;
+}
+
+.dark #sideMenu {
+  background: #222;
+}
+
+.dark #choices button {
+  background: #777;
+  color: #fff;
+}
+
+.dark .nav button,
+.dark .homeBtn {
+  background: #666;
+  color: #fff;
+}
+
+.dark #explanation {
+  background: #88bbee;
+  color: #000;
+}
+
+.hidden {
+  display: none;
 }
