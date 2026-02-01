@@ -20,18 +20,29 @@ body {
   top: 0;
   left: 0;
   width: 200px;
-  height: 45%;
+  height: 40%;
   background: #fff;
-  padding: 16px;
+  padding: 48px 16px 16px 16px; /* ☰と重ならない */
   z-index: 1000;
+
+  display: flex;
+  flex-direction: column; /* 縦並び */
 }
 
 .menuHeader {
   font-size: 20px;
-  margin-bottom: 16px; /* ← ☰と重ならない */
+  margin-bottom: 20px;
+  margin-left: 6px; /* 左にずらす */
 }
 
-/* 背景 */
+#sideMenu button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* 背景クリック */
 #overlay {
   position: fixed;
   inset: 0;
@@ -56,7 +67,7 @@ body {
 
 #home button {
   width: 240px;
-  padding: 14px;
+  padding: 16px;
   font-size: 18px;
   margin: 8px;
 }
@@ -85,8 +96,9 @@ body {
   background: #fff;
 }
 
+/* 正誤 */
 .correct { background: #b6f2c2 !important; }
-.wrong { background: #f2b6b6 !important; }
+.wrong   { background: #f2b6b6 !important; }
 
 /* 解説 */
 #explanation {
@@ -105,12 +117,12 @@ body {
 }
 
 .homeBtn {
-  margin-top: 24px; /* ← 前・次と少し離す */
-  padding: 12px;
+  margin-top: 26px; /* 前・次から少し離す */
+  padding: 14px;
   font-size: 16px;
 }
 
-/* ダーク */
+/* ダークモード */
 .dark body {
   background: #000;
   color: #fff;
@@ -138,7 +150,7 @@ body {
 
 .dark #explanation {
   background: #88bbee;
-  color: #000;
+  color: #000; /* ← 指示どおり黒 */
 }
 
 .hidden {
