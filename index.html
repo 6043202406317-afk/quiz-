@@ -8,10 +8,12 @@
 </head>
 <body>
 
+<!-- 正答率 -->
+<p id="rate">正答率：--%（0/0）</p>
+
 <!-- ホーム画面 -->
 <div id="home">
   <h1>過去問道場</h1>
-
   <div class="subjects">
     <button onclick="startQuiz('it')">情報技術（テスト）</button>
     <button onclick="startQuiz('physics')">物理</button>
@@ -21,12 +23,10 @@
 
 <!-- 問題画面 -->
 <div id="quiz" class="hidden">
-  <p id="rate">正答率：0%</p>
-
   <h2 id="question"></h2>
-
   <div id="choices"></div>
 
+  <p id="result"></p>
   <p id="explanation"></p>
 
   <div class="nav">
