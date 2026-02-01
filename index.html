@@ -2,35 +2,34 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>過去問道場</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>過去問道場</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ☰ -->
-<div id="menuBtn">☰</div>
+<!-- ☰ メニュー -->
+<button id="menuBtn">☰</button>
 
-<!-- サイドメニュー -->
-<div id="sideMenu" class="hidden">
-  <div class="menuHeader">設定</div>
-  <button id="darkBtn">ダークモード</button>
+<!-- 設定メニュー -->
+<div id="settings">
+  <h2>設定</h2>
+  <button id="darkToggle">ダークモード</button>
   <button>禪院 直哉</button>
 </div>
-<div id="overlay" class="hidden"></div>
 
 <!-- ホーム画面 -->
 <div id="home" class="screen">
   <h1>過去問道場</h1>
-  <button onclick="startQuiz('it')">情報技術（テスト）</button>
-  <button onclick="startQuiz('physics')">物理</button>
-  <button onclick="startQuiz('english')">英語</button>
+  <div class="subject-list">
+    <button onclick="startQuiz('it')">情報技術（テスト）</button>
+    <button onclick="startQuiz('physics')">物理</button>
+    <button onclick="startQuiz('english')">英語</button>
+  </div>
 </div>
 
 <!-- 問題画面 -->
 <div id="quiz" class="screen hidden">
-  <p id="rate">正答率：--%</p>
-
   <div id="question"></div>
 
   <div id="choices"></div>
@@ -43,6 +42,59 @@
   </div>
 
   <button class="homeBtn" onclick="goHome()">ホーム画面</button>
+
+  <div id="rate"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>過去問道場</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ☰ メニュー -->
+<button id="menuBtn">☰</button>
+
+<!-- 設定メニュー -->
+<div id="settings">
+  <h2>設定</h2>
+  <button id="darkToggle">ダークモード</button>
+  <button>禪院 直哉</button>
+</div>
+
+<!-- ホーム画面 -->
+<div id="home" class="screen">
+  <h1>過去問道場</h1>
+  <div class="subject-list">
+    <button onclick="startQuiz('it')">情報技術（テスト）</button>
+    <button onclick="startQuiz('physics')">物理</button>
+    <button onclick="startQuiz('english')">英語</button>
+  </div>
+</div>
+
+<!-- 問題画面 -->
+<div id="quiz" class="screen hidden">
+  <div id="question"></div>
+
+  <div id="choices"></div>
+
+  <div id="explanation"></div>
+
+  <div class="nav">
+    <button onclick="prevQuestion()">前の問題</button>
+    <button onclick="nextQuestion()">次の問題</button>
+  </div>
+
+  <button class="homeBtn" onclick="goHome()">ホーム画面</button>
+
+  <div id="rate"></div>
 </div>
 
 <script src="script.js"></script>
