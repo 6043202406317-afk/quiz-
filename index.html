@@ -3,39 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>過去問道場</title>
+  <title>過去問アプリ</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- ホーム画面 -->
-<div id="home" class="screen active">
-  <h1 class="title">過去問道場</h1>
-
+<div id="home">
+  <h1>教科選択</h1>
   <div class="subject-list">
-    <button onclick="startQuiz('it')">情報技術（テスト）</button>
-    <button onclick="startQuiz('physics')">物理</button>
-    <button onclick="startQuiz('english')">英語</button>
+    <button onclick="startQuiz('info')">情報技術（テスト）</button>
   </div>
 </div>
 
 <!-- 問題画面 -->
-<div id="quiz" class="screen">
-  <div id="status" class="status"></div>
-
-  <div id="question" class="question"></div>
-
-  <div id="choices" class="choices"></div>
-
-  <div id="explanation" class="explanation"></div>
-
-  <!-- ナビ -->
-  <div class="nav-row">
-    <button onclick="prevQuestion()">前の問題</button>
-    <button onclick="nextQuestion()">次の問題</button>
+<div id="quiz" class="hidden">
+  <div id="status">
+    正答率：
+    <span id="rate">0%</span>
+    <span id="count">(0 / 0)</span>
   </div>
 
-  <div class="nav-home">
+  <h2 id="question"></h2>
+
+  <div id="choices"></div>
+
+  <div class="nav">
+    <button onclick="prevQuestion()">前の問題</button>
+    <button onclick="nextQuestion()">次の問題</button>
     <button onclick="goHome()">ホーム画面</button>
   </div>
 </div>
