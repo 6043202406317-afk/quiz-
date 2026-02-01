@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>過去問道場</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>過去問道場風</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- ホーム画面 -->
-<div id="home">
-  <h1>過去問道場</h1>
-  <div class="subjects">
-    <button onclick="startQuiz('it')">情報技術（テスト）</button>
-    <button onclick="startQuiz('physics')">物理</button>
-    <button onclick="startQuiz('english')">英語</button>
+<div id="home" class="screen active">
+  <h1>教科選択</h1>
+  <div class="subject-list">
+    <button onclick="startQuiz('info')">情報技術</button>
   </div>
 </div>
 
 <!-- 問題画面 -->
-<div id="quiz" style="display:none;">
-  <div id="status"></div>
+<div id="quiz" class="screen">
+  <div class="status">
+    <span id="rate">正答率 0%（0 / 0）</span>
+  </div>
+
   <div id="question"></div>
+
   <div id="choices"></div>
+
   <div id="explanation"></div>
 
   <div class="nav">
