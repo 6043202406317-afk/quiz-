@@ -1,118 +1,107 @@
 const data = {
   it: [
-    { q: "CPUの役割は？", c: ["計算", "保存", "表示", "通信"], a: 0, e: "CPUは計算と制御を行う。" },
-    { q: "2進数10は？", c: ["1", "2", "3", "4"], a: 1, e: "10進数で2。" },
-    { q: "RAMの特徴は？", c: ["一時記憶", "永久保存", "外部記憶", "ROM"], a: 0, e: "RAMは一時記憶。" }
+    {
+      q: "CPUの主な役割は？",
+      o: ["記憶", "演算", "表示", "印刷"],
+      a: 1,
+      e: "CPUは演算や制御を行う装置です。"
+    },
+    {
+      q: "2進数の101は10進数でいくつ？",
+      o: ["4", "5", "6", "7"],
+      a: 1,
+      e: "2進数101は10進数で5です。"
+    },
+    {
+      q: "RAMの特徴として正しいものは？",
+      o: ["電源を切っても残る", "一時的に使われる", "補助記憶装置", "読み取り専用"],
+      a: 1,
+      e: "RAMは一時的にデータを保存します。"
+    },
+    {
+      q: "OSの役割は？",
+      o: ["計算を行う", "機器や資源を管理する", "印刷のみ行う", "通信だけ行う"],
+      a: 1,
+      e: "OSはコンピュータ全体を管理します。"
+    }
   ],
+
   physics: [
-    { q: "力の単位は？", c: ["kg", "N", "J", "W"], a: 1, e: "力の単位はN。" }
+    { q:"力の単位は？", o:["N","J","W","Pa"], a:0, e:"力の単位はニュートン(N)です。" },
+    { q:"速さの式は？", o:["距離÷時間","時間÷距離","距離×時間","力×距離"], a:0, e:"速さ＝距離÷時間" }
   ],
+
   english: [
-    { q: "appleの意味は？", c: ["犬", "りんご", "車", "本"], a: 1, e: "appleはりんご。" }
+    { q:"I ___ a pen.", o:["have","has","had","having"], a:0, e:"主語が I のときは have" },
+    { q:"apple の複数形は？", o:["apples","applees","appls","apple"], a:0, e:"普通に s をつけます。" }
   ]
 };
 
-let subject = "";
-let questions = [];
-let index = 0;
-let answered = {};
-let correct = 0;
+let subject, qs, idx = 0;
+let answered = [];
 
-const home = document.getElementById("home");
-const quiz = document.getElementById("quiz");
-const question = document.getElementById("question");
-const choices = document.getElementById("choices");
-const explanation = document.getElementById("explanation");
-const rate = document.getElementById("rate");
-
-/* シャッフル関数 */
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
+function shuffle(arr){
+  return arr.sort(() => Math.random() - 0.5);
 }
 
-/* 開始 */
-function startQuiz(type) {
-  subject = type;
-  questions = [...data[type]];
-  shuffle(questions);          // ★問題ランダム
-  index = 0;
-  answered = {};
-  correct = 0;
-
+function start(s){
+  subject = s;
+  qs = shuffle([...data[s]]);
+  qs.forEach(q => q.o = shuffle(q.o));
+  idx = 0;
+  answered = [];
   home.classList.add("hidden");
   quiz.classList.remove("hidden");
-
-  showQuestion();
+  show();
 }
 
-/* 表示 */
-function showQuestion() {
-  const q = questions[index];
+function show(){
+  const q = qs[idx];
   question.textContent = q.q;
-  explanation.textContent = "";
-  choices.innerHTML = "";
+  options.innerHTML = "";
+  explain.textContent = "";
 
-  // 選択肢を index 付きでシャッフル
-  const choiceList = q.c.map((text, i) => ({ text, i }));
-  shuffle(choiceList);         // ★選択肢ランダム
-
-  choiceList.forEach(item => {
-    const btn = document.createElement("button");
-    btn.textContent = item.text;
-    btn.className = "choice";
-
-    btn.onclick = () => {
-      document.querySelectorAll(".choice").forEach(b =>
-        b.classList.remove("correct", "wrong")
-      );
-
-      if (!(index in answered)) {
-        answered[index] = true;
-        if (item.i === q.a) correct++;
+  q.o.forEach((opt, i) => {
+    const b = document.createElement("button");
+    b.textContent = opt;
+    b.className = "option";
+    b.onclick = () => {
+      if(answered[idx] === undefined){
+        answered[idx] = (i === q.a);
       }
-
-      btn.classList.add(item.i === q.a ? "correct" : "wrong");
-      explanation.textContent = q.e;
+      b.classList.add(i === q.a ? "correct" : "wrong");
+      explain.textContent = q.e;
       updateRate();
     };
-
-    choices.appendChild(btn);
+    options.appendChild(b);
   });
+
+  updateRate();
 }
 
-/* 正答率 */
-function updateRate() {
-  const total = Object.keys(answered).length;
-  const percent = total ? Math.round((correct / total) * 100) : 0;
-  rate.textContent = `正答率：${percent}%`;
+function updateRate(){
+  const total = answered.filter(v => v !== undefined).length;
+  const ok = answered.filter(v => v).length;
+  rate.textContent = `正答率 ${total ? Math.round(ok/total*100) : 0}%（${ok}/${total}）`;
 }
 
-/* 移動 */
-function nextQuestion() {
-  index = (index + 1) % questions.length;
-  showQuestion();
+function nextQ(){
+  if(idx < qs.length - 1){ idx++; show(); }
 }
-function prevQuestion() {
-  index = (index - 1 + questions.length) % questions.length;
-  showQuestion();
+
+function prevQ(){
+  if(idx > 0){ idx--; show(); }
 }
-function goHome() {
+
+function goHome(){
   quiz.classList.add("hidden");
   home.classList.remove("hidden");
 }
 
-/* 設定 */
-const menuBtn = document.getElementById("menuBtn");
-const settings = document.getElementById("settings");
-const darkBtn = document.getElementById("darkBtn");
+function toggleMenu(){
+  menu.classList.toggle("hidden");
+}
 
-menuBtn.onclick = (e) => {
-  e.stopPropagation();
-  settings.classList.toggle("hidden");
-};
-document.onclick = () => settings.classList.add("hidden");
-settings.onclick = e => e.stopPropagation();
-darkBtn.onclick = () => document.body.classList.toggle("dark");
+function toggleDark(){
+  document.body.classList.toggle("dark");
+}
