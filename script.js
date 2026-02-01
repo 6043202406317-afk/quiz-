@@ -1,112 +1,101 @@
-const data = {
+const quizData = {
   it: [
-    { q: "CPUの役割は？", c: ["記憶", "演算", "表示", "印刷"], a: 1, e: "CPUは演算と制御を行います。" },
-    { q: "2進数の10は？", c: ["1", "2", "3", "4"], a: 1, e: "10進数で2です。" },
-    { q: "RAMの特徴は？", c: ["永続", "一時", "補助", "ROM"], a: 1, e: "RAMは一時記憶装置です。" },
-    { q: "OSの役割は？", c: ["計算", "管理", "印刷", "保存"], a: 1, e: "OSは全体を管理します。" }
+    { q: "CPUの役割は？", c: ["計算処理", "保存", "表示", "通信"], a: 0, e: "CPUは計算と制御を行う。" },
+    { q: "2進数の1+1は？", c: ["1", "10", "11", "0"], a: 1, e: "2進数では10。" },
+    { q: "RAMの特徴は？", c: ["揮発性", "永久保存", "低速", "外部記憶"], a: 0, e: "電源を切ると消える。" },
+    { q: "OSの例は？", c: ["Windows", "CPU", "USB", "HDMI"], a: 0, e: "OSは基本ソフト。" }
   ],
-  physics: [
-    { q: "力の単位は？", c: ["J", "W", "N", "kg"], a: 2, e: "ニュートン(N)です。" }
-  ],
-  english: [
-    { q: "appleの意味は？", c: ["犬", "りんご", "本", "車"], a: 1, e: "りんごです。" }
-  ]
+  physics: [],
+  english: []
 };
 
-let questions = [];
-let index = 0;
-let correct = 0;
-let answered = 0;
-let counted = false;
+let subject, index = 0;
+let answered = {};
+let correctCount = 0;
 
-function startQuiz(type) {
-  questions = shuffle([...data[type]]);
+const home = document.getElementById("home");
+const quiz = document.getElementById("quiz");
+const question = document.getElementById("question");
+const choices = document.getElementById("choices");
+const explanation = document.getElementById("explanation");
+const rate = document.getElementById("rate");
+
+function startQuiz(s) {
+  subject = s;
   index = 0;
-  correct = 0;
-  answered = 0;
-  updateRate();
-  document.getElementById("home").classList.add("hidden");
-  document.getElementById("quiz").classList.remove("hidden");
+  answered = {};
+  correctCount = 0;
+  home.classList.add("hidden");
+  quiz.classList.remove("hidden");
   showQuestion();
 }
 
 function showQuestion() {
-  counted = false;
-  const q = questions[index];
-  document.getElementById("question").textContent = q.q;
-  document.getElementById("explanation").textContent = "";
-
-  const choices = document.getElementById("choices");
+  const data = quizData[subject][index];
+  question.textContent = data.q;
+  explanation.textContent = "";
   choices.innerHTML = "";
 
-  shuffle(q.c.map((t,i)=>({t,i}))).forEach(o=>{
-    const b = document.createElement("button");
-    b.textContent = o.t;
-    b.onclick = () => answer(o.i, b);
-    choices.appendChild(b);
+  const shuffled = [...data.c].map((v,i)=>({v,i})).sort(()=>Math.random()-0.5);
+
+  shuffled.forEach(obj => {
+    const btn = document.createElement("button");
+    btn.textContent = obj.v;
+    btn.className = "choice";
+
+    btn.onclick = () => {
+      explanation.textContent = data.e;
+
+      if (!(index in answered)) {
+        answered[index] = obj.i === data.a;
+        if (answered[index]) correctCount++;
+      }
+
+      document.querySelectorAll(".choice").forEach(b=>b.classList.remove("correct"));
+      if (obj.i === data.a) btn.classList.add("correct");
+
+      updateRate();
+    };
+
+    choices.appendChild(btn);
   });
-}
-
-function answer(i, btn) {
-  const q = questions[index];
-
-  document.querySelectorAll("#choices button").forEach(b=>{
-    b.classList.remove("correct","wrong");
-  });
-
-  if (i === q.a) btn.classList.add("correct");
-  else btn.classList.add("wrong");
-
-  if (!counted) {
-    counted = true;
-    answered++;
-    if (i === q.a) correct++;
-    updateRate();
-  }
-
-  document.getElementById("explanation").textContent = "解説：" + q.e;
-}
-
-function updateRate() {
-  const rate = answered ? Math.round((correct / answered) * 100) : 0;
-  document.getElementById("rate").textContent =
-    `正答率：${rate}%（${correct}/${answered}）`;
 }
 
 function nextQuestion() {
-  index = (index + 1) % questions.length;
+  index = (index + 1) % quizData[subject].length;
   showQuestion();
 }
 
 function prevQuestion() {
-  index = (index - 1 + questions.length) % questions.length;
+  index = (index - 1 + quizData[subject].length) % quizData[subject].length;
   showQuestion();
 }
 
 function goHome() {
-  document.getElementById("quiz").classList.add("hidden");
-  document.getElementById("home").classList.remove("hidden");
+  quiz.classList.add("hidden");
+  home.classList.remove("hidden");
 }
 
-/* メニュー */
+function updateRate() {
+  rate.textContent = `正答率: ${correctCount} / ${Object.keys(answered).length}`;
+}
+
+/* 設定 */
 const menuBtn = document.getElementById("menuBtn");
-const sideMenu = document.getElementById("sideMenu");
-const overlay = document.getElementById("overlay");
+const settings = document.getElementById("settings");
+const darkToggle = document.getElementById("darkToggle");
 
 menuBtn.onclick = () => {
-  sideMenu.classList.toggle("hidden");
-  overlay.classList.toggle("hidden");
-};
-overlay.onclick = () => {
-  sideMenu.classList.add("hidden");
-  overlay.classList.add("hidden");
+  settings.style.display = settings.style.display === "block" ? "none" : "block";
 };
 
-/* ダーク */
-document.getElementById("darkBtn").onclick = () => {
-  document.documentElement.classList.toggle("dark");
-};
+document.body.addEventListener("click", e => {
+  if (!settings.contains(e.target) && e.target !== menuBtn) {
+    settings.style.display = "none";
+  }
+});
 
-function shuffle(arr) {
-  return arr.sort(() => Math.random() - 0.5);
-}
+darkToggle.onclick = e => {
+  e.stopPropagation();
+  document.body.classList.toggle("dark");
+};
