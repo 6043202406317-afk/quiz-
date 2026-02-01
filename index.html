@@ -19,14 +19,18 @@
 <!-- ホーム -->
 <div id="home" class="screen">
   <h1>過去問道場</h1>
-  <button onclick="startQuiz('it')">情報技術（テスト）</button>
-  <button onclick="startQuiz('physics')">物理</button>
-  <button onclick="startQuiz('english')">英語</button>
+
+  <!-- ★中央寄せ用ラッパー -->
+  <div class="home-buttons">
+    <button onclick="startQuiz('it')">情報技術（テスト）</button>
+    <button onclick="startQuiz('physics')">物理</button>
+    <button onclick="startQuiz('english')">英語</button>
+  </div>
 </div>
 
 <!-- クイズ -->
 <div id="quiz" class="screen hidden">
-  <div id="rate">正答率：0%（0 / 0）</div>
+  <div id="rate">正答率：0%</div>
 
   <div id="question"></div>
   <div id="choices"></div>
